@@ -54,3 +54,19 @@ function requestWithdrawal(){var amt=Number($("wAmount").value);if(!amt||amt<200
 function copyLink(){var t=$("memLink").innerText.replace("Your Link: ","");navigator.clipboard.writeText(t);alert("Link copied")}
 document.querySelectorAll("#mainNav button").forEach(function(b){b.addEventListener("click",function(){showPage(b.getAttribute("data-page"))})});
 fillBanks();fillPlans();calcSavings();renderHome();
+// FIX: Simple product render - overrides broken version
+function renderProducts(){
+var q=(document.getElementById("searchInput").value||"").toLowerCase();
+var box=document.getElementById("homeProducts");
+var html="";
+for(var i=0;i<PRODUCTS.length;i++){
+var p=PRODUCTS[i];
+if(currentCat!=="all"&&p[3]!==currentCat)continue;
+if(q&&p[0].toLowerCase().indexOf(q)===-1)continue;
+var per=Math.round(p[1]/4);
+html+="<div class='prod'><img src='"+p[4]+"'><div class='prod-body'><span class='tag'>IN STOCK - PAY SMALL SMALL</span><b>"+p[0]+"</b><div class='stars'>★★★★★ (128)</div><div class='price'>₦"+p[1].toLocaleString()+" <span class='old'>₦"+p[2].toLocaleString()+"</span></div><small>or 4 x ₦"+per.toLocaleString()+" - Free Lagos Delivery</small><button class='btn' style='margin-top:10px;padding:11px' onclick='startOrder(\""+p[0]+"\", "+p[1]+")'>Pay Small Small →</button></div></div>";
+}
+if(!html)html="<p>No product found. Try generator, fridge or TV.</p>";
+box.innerHTML=html;
+}
+renderProducts();
