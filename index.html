@@ -36,119 +36,104 @@ nav button{border:none;background:none;font-size:12px}.hidden{display:none!impor
 <body>
 <div class="unity"></div>
 <div class="topbar">ONE BANK COOPERATIVE - OBC • PAN-AFRICAN COOPERATIVE • RC: OB/2026/001</div>
-<header><button onclick="toggleDrawer()" style="background:none;border:none;color:#fff;font-size:22px">☰</button>
+<header><button type="button" onclick="toggleDrawer()" style="background:none;border:none;color:#fff;font-size:22px">☰</button>
 <div class="logo">OB</div><div><h1>ONE BANK <small>COOPERATIVE</small></h1><small>SAVE • SHOP • EARN • UBUNTU</small></div>
-<button class="joinBtn" onclick="showPage('join')">Join →</button></header>
+<button type="button" class="joinBtn" onclick="showPage('join')">Join →</button></header>
 
 <div class="countrybar">
-<button id="cNG" class="active" onclick="setCountry('Nigeria')">🇳🇬 NG</button>
-<button id="cGH" onclick="setCountry('Ghana')">🇬🇭 GH</button>
-<button id="cZA" onclick="setCountry('South Africa')">🇿🇦 ZA</button>
+<button type="button" id="cNG" class="active" onclick="setCountry('Nigeria')">🇳🇬 NG</button>
+<button type="button" id="cGH" onclick="setCountry('Ghana')">🇬🇭 GH</button>
+<button type="button" id="cZA" onclick="setCountry('South Africa')">🇿🇦 ZA</button>
 <span id="rateStrip">You are in Nigeria • 1 USD = ₦1,353 • Min Withdrawal ₦2,710 ($2)</span>
 </div>
 
 <div class="drawer" id="drawer">
 <b>ONE BANK COOPERATIVE</b><p style="font-size:12px">Pan-African Cooperative</p>
-<button onclick="showPage('home')">🏠 Home</button>
-<button onclick="showPage('shop')">🛒 Shop</button>
-<button onclick="showPage('join')">➕ Join ONE BANK</button>
-<button onclick="showPage('login')">🔑 Member Login</button>
-<button onclick="showPage('admin')">🛡️ Admin Login</button>
-<button onclick="toggleDrawer()">✖ Close</button>
-<p style="font-size:11px;color:#777">v3.0 • Pan-African Cooperative • Manual Launch</p></div>
+<button type="button" onclick="showPage('home')">🏠 Home</button>
+<button type="button" onclick="showPage('shop')">🛒 Shop</button>
+<button type="button" onclick="showPage('join')">➕ Join ONE BANK</button>
+<button type="button" onclick="showPage('login')">🔑 Member Login</button>
+<button type="button" onclick="showPage('admin')">🛡️ Admin Login</button>
+<button type="button" onclick="toggleDrawer()">✖ Close</button>
+<p style="font-size:11px;color:#777">v3.1 FIXED • Pan-African Cooperative • Manual Launch</p></div>
 
-<!-- HOME -->
 <div id="page-home">
-<div class="hero"><img src="https://images.unsplash.com/photo-1509099836639-18ba1795216d?w=900">
+<div class="hero"><img src="https://images.unsplash.com/photo-1509099836639-18ba1795216d?w=900" alt="One Bank">
 <div class="heroTxt"><span style="background:#FFD700;color:#000;padding:4px 10px;border-radius:99px;font-size:11px;font-weight:800">UBUNTU • I AM BECAUSE WE ARE</span>
 <h2>ONE BANK.<br>Three Nations.<br>One People.</h2><p>Join, save, shop and earn. One family, one cooperative.</p>
-<button class="btnW" onclick="showPage('shop')">Explore Products</button> <button class="btnG" onclick="showPage('join')">Join ONE BANK</button></div></div>
-
+<button type="button" class="btnW" onclick="showPage('shop')">Explore Products</button> <button type="button" class="btnG" onclick="showPage('join')">Join ONE BANK</button></div></div>
 <div class="card"><h3>What is ONE BANK Cooperative?</h3><p>A trusted community cooperative helping members save together, earn rewards on every referral, shop home essentials in 4 small payments, and build your future together.</p></div>
-
-<!-- SAYINGS - SPACED + SPICED -->
 <div class="card"><h3>🌍 Our Sayings</h3>
 <div class="say" style="background:#E8F5E9;border-left:5px solid #008751"><b>🇳🇬 NIGERIA</b><p>“When spiders unite, they can tie up a lion.”</p><small>Together, we are unstoppable.</small></div>
 <div class="say" style="background:#FEF3C7;border-left:5px solid #FFD700"><b>🇬🇭 GHANA</b><p>“One finger cannot lift a load.”</p><small>We lift it together.</small></div>
 <div class="say" style="background:#FDECEA;border-left:5px solid #DE3831"><b>🇿🇦 SOUTH AFRICA</b><p>“Umuntu ngumuntu ngabantu.”</p><small>I am because we are.</small></div>
 </div>
-
 <div class="card"><h3>📢 ANNOUNCEMENT</h3><p id="homeAnnouncement">Welcome to ONE BANK. Join, save, shop and earn.</p></div>
-
-<div class="card"><h3>🧮 Savings Calculator</h3><label>Weekly Savings <span id="calcSym">₦</span></label><input id="calcWeekly" type="number" value="5000" oninput="calcSavings()"><p id="calcResult">Save ₦5,000 weekly = ₦260,000 in 1 year</p></div>
-
+<div class="card"><h3>🧮 Savings Calculator</h3><label>Weekly Savings <span id="calcSym">₦</span></label><input id="calcWeekly" type="number" inputmode="numeric" value="5000"><p id="calcResult">Save ₦5,000 weekly = ₦260,000 in 1 year</p><p id="calcTest" style="font-size:11px;color:#065F46"></p></div>
 <div class="card"><h3>💬 What Members Say</h3>
 <div class="testi"><b>⭐⭐⭐⭐⭐ Ada — Lagos, Nigeria</b><p>“I got my fridge in 4 payments. Very real.”</p></div>
 <div class="testi"><b>⭐⭐⭐⭐⭐ Kwame — Accra, Ghana</b><p>“My MoMo referral bonus came fast. ONE BANK is family.”</p></div>
-<div class="testi"><b>⭐⭐⭐⭐⭐ Thandi — Johannesburg, South Africa</b><p>“I saved small small and bought my TV. Thank you ONE BANK.”</p></div>
-</div>
-
+<div class="testi"><b>⭐⭐⭐⭐⭐ Thandi — Johannesburg, South Africa</b><p>“I saved small small and bought my TV. Thank you ONE BANK.”</p></div></div>
 <div class="card"><h3>❓ FAQ</h3>
 <p><b>Is ONE BANK a bank?</b><br>No. A cooperative. Not licensed bank. No deposits. No guaranteed profit.</p>
 <p><b>How do I pay?</b><br>Pay in 4 installments.</p>
 <p><b>How do I earn?</b><br>Invite new members into ONE BANK Cooperative with your code. Earn Direct bonus + Indirect bonus when admin approves them.</p>
 <p><b>Min withdrawal?</b><br>Only <b>$2</b> — <span id="minLabel1">₦2,710</span> in your country.</p></div>
-<div class="card" style="text-align:center"><h3>Ready to join?</h3><button class="btnGold" onclick="showPage('join')">Join ONE BANK →</button></div>
+<div class="card" style="text-align:center"><h3>Ready to join?</h3><button type="button" class="btnGold" onclick="showPage('join')">Join ONE BANK →</button></div>
 </div>
 
-<!-- SHOP - NO SEARCH -->
 <div id="page-shop" class="hidden">
 <div class="card"><h2>Shop — Pay Small Small</h2><p>Tap any product — Pay in 4. <span id="shopCountryNote">Prices in Nigeria</span></p>
-<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px"><button onclick="setCat('All')">All</button><button onclick="setCat('gen')">Generators</button><button onclick="setCat('fridge')">Fridges</button><button onclick="setCat('freezer')">Freezers</button><button onclick="setCat('tv')">TVs</button><button onclick="setCat('home')">Home</button></div></div>
+<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px"><button type="button" onclick="setCat('All')">All</button><button type="button" onclick="setCat('gen')">Generators</button><button type="button" onclick="setCat('fridge')">Fridges</button><button type="button" onclick="setCat('freezer')">Freezers</button><button type="button" onclick="setCat('tv')">TVs</button><button type="button" onclick="setCat('home')">Home</button></div></div>
 <div id="shopProducts" class="grid" style="padding:0 12px"></div></div>
 
-<!-- JOIN - CLEAN -->
 <div id="page-join" class="hidden">
 <div class="card"><h2>Join ONE BANK</h2>
-<input id="jName" placeholder="Full Name">
-<input id="jPhone" placeholder="080... (e.g 08031234567)">
-<input id="jPass" type="password" placeholder="Create Password">
+<input id="jName" placeholder="Full Name" autocomplete="name">
+<input id="jPhone" placeholder="080... (e.g 08031234567)" autocomplete="tel">
+<input id="jPass" type="password" placeholder="Create Password" autocomplete="new-password">
 <select id="jBank"></select>
-<input id="jAcct" placeholder="Account Number">
+<input id="jAcct" placeholder="Account Number" inputmode="numeric">
 <input id="jAcctName" placeholder="Account Name">
 <label style="font-size:13px;font-weight:700">Choose Plan</label>
 <select id="jPlan"></select>
 <input type="hidden" id="jRef" value="ONEBANK">
 <p id="joinErr" style="color:red;font-size:13px"></p>
-<button class="btnGold" onclick="joinMember()">Continue to Payment →</button></div>
+<button type="button" class="btnGold" onclick="joinMember()">Continue to Payment →</button></div>
 <div class="card" id="payCard" style="display:none"><h3>💰 Pay Membership Fee</h3>
 <p>Amount: <b id="payAmount"></b></p>
 <label>Sender Name</label><input id="paySender" placeholder="Name that sent the money">
 <label>Payment Reference</label><input id="payRef" placeholder="e.g. MoMo Ref / Bank Ref">
-<button class="btnGold" onclick="submitPayment()">I Have Paid — Submit For Confirmation</button></div></div>
+<button type="button" class="btnGold" onclick="submitPayment()">I Have Paid — Submit For Confirmation</button></div></div>
 
-<!-- LOGIN - DIFFERENT BACKGROUND -->
 <div id="page-login" class="hidden"><div class="card"><div class="loginWrap"><h2>Member Login</h2><p>Your country and currency follow you. Login to open your dashboard.</p>
-<input id="mPhone" placeholder="Phone"><input id="mPass" type="password" placeholder="Password"><p id="loginErr" style="color:#FECACA"></p><button class="btnGold" onclick="memberLogin()">Login →</button><p>No account? <a href="#" onclick="showPage('join')" style="color:#FFD700">Join here</a></p></div></div></div>
+<input id="mPhone" placeholder="Phone" autocomplete="tel"><input id="mPass" type="password" placeholder="Password" autocomplete="current-password"><p id="loginErr" style="color:#FECACA"></p><button type="button" class="btnGold" onclick="memberLogin()">Login →</button><p>No account? <a href="#" onclick="showPage('join');return false;" style="color:#FFD700">Join here</a></p></div></div></div>
 
-<!-- SAVINGS / PROFILE - NOT PUBLIC, INSIDE DASHBOARD ONLY -->
-<div id="page-savings" class="hidden"><div class="card"><h2>Savings</h2><p id="savingsGate">Please login to view your savings inside your dashboard.</p><button class="btnNavy" onclick="showPage('login')">Login</button></div></div>
+<div id="page-savings" class="hidden"><div class="card"><h2>Savings</h2><p id="savingsGate">Please login to view your savings inside your dashboard.</p><button type="button" class="btnNavy" onclick="showPage('login')">Login</button></div></div>
 
-<!-- MEMBER DASHBOARD - ONLY AFTER LOGIN -->
 <div id="page-profile" class="hidden">
-<div class="card" id="profileGate"><h2>Member Dashboard</h2><p>Please login first.</p><button class="btnNavy" onclick="showPage('login')">Login →</button></div>
+<div class="card" id="profileGate"><h2>Member Dashboard</h2><p>Please login first.</p><button type="button" class="btnNavy" onclick="showPage('login')">Login →</button></div>
 <div id="profileDash" style="display:none">
 <div class="card"><h2 id="memName">My Wallet</h2><p>Code: <b id="memCode">-</b> • Plan: <b id="memPlan">-</b> • Status: <b id="memStatus">-</b></p>
 <h1 id="walletMain">₦0</h1><p id="walletOther"></p><p id="walletMin" style="font-size:12px"></p><p id="walletLiveNote" style="font-size:12px;color:#065F46"></p>
-<button class="btnGold" onclick="copyLink()">Copy Referral Link</button><p id="memLink" style="font-size:11px;word-break:break-all"></p></div>
-<div class="card"><h3>💰 My Savings</h3><p>Only approved members can save.</p><label>Save Amount</label><input id="saveAmt" type="number" placeholder="Amount to save"><button class="btnNavy" onclick="addSavings()">Save Now</button><div id="savingsList"></div></div>
-<div class="card"><h3>💳 Withdraw</h3><label>Withdraw Amount</label><input id="wAmount" type="number" placeholder="Min $2"><button class="btnNavy" onclick="requestWithdrawal()">Request Withdrawal</button><div id="memWithdrawals"></div></div>
+<button type="button" class="btnGold" onclick="copyLink()">Copy Referral Link</button><p id="memLink" style="font-size:11px;word-break:break-all"></p></div>
+<div class="card"><h3>💰 My Savings</h3><p>Only approved members can save.</p><label>Save Amount</label><input id="saveAmt" type="number" inputmode="numeric" placeholder="Amount to save"><button type="button" class="btnNavy" onclick="addSavings()">Save Now</button><div id="savingsList"></div></div>
+<div class="card"><h3>💳 Withdraw</h3><label>Withdraw Amount</label><input id="wAmount" type="number" inputmode="numeric" placeholder="Min $2"><button type="button" class="btnNavy" onclick="requestWithdrawal()">Request Withdrawal</button><div id="memWithdrawals"></div></div>
 <div class="card"><h3>🛒 My Orders</h3><div id="memOrdersList"></div></div>
-<div class="card"><h3>✏️ Edit My Profile / Update Bank</h3><input id="eName" placeholder="Full Name"><select id="eBank"></select><input id="eAcct" placeholder="Account Number"><input id="eAcctName" placeholder="Account Name"><button class="btnGold" onclick="saveProfileEdit()">Save Changes</button></div>
-<button onclick="memberLogout()" style="margin:12px">Logout</button>
+<div class="card"><h3>✏️ Edit My Profile / Update Bank</h3><input id="eName" placeholder="Full Name"><select id="eBank"></select><input id="eAcct" placeholder="Account Number"><input id="eAcctName" placeholder="Account Name"><button type="button" class="btnGold" onclick="saveProfileEdit()">Save Changes</button></div>
+<button type="button" onclick="memberLogout()" style="margin:12px">Logout</button>
 </div></div>
 
-<!-- ADMIN - LOGIN ONLY, DASHBOARD HIDDEN UNTIL LOGIN -->
-<div id="page-admin" class="hidden"><div class="card" id="adminLoginBox"><h2>Admin Login</h2><input id="aEmail" placeholder="Admin Email"><input id="aPass" type="password" placeholder="Admin Password"><p id="adminLoginErr" style="color:red"></p><button class="btnNavy" onclick="adminLogin()">Admin Login →</button><br><br><button onclick="forgotAdminPassword()" style="background:none;border:none;color:#0A1931;text-decoration:underline">Forgot Password?</button></div>
+<div id="page-admin" class="hidden"><div class="card" id="adminLoginBox"><h2>Admin Login</h2><input id="aEmail" placeholder="Admin Email" autocomplete="email"><input id="aPass" type="password" placeholder="Admin Password" autocomplete="current-password"><p id="adminLoginErr" style="color:red"></p><button type="button" class="btnNavy" onclick="adminLogin()">Admin Login →</button><br><br><button type="button" onclick="forgotAdminPassword()" style="background:none;border:none;color:#0A1931;text-decoration:underline">Forgot Password?</button></div>
 <div id="adminDash" style="display:none"><div class="card"><h2 id="adminTitle">Admin Dashboard</h2><p id="adminSub"></p><p id="adminStats"></p><p id="adminLiveNote"></p></div>
-<div class="card"><h3>💳 My Country Pay Settings</h3><input id="psBank" placeholder="Bank / MoMo Name"><input id="psName" placeholder="Account Name"><input id="psNumber" placeholder="Account / MoMo Number"><input id="psInstr" placeholder="Instructions"><button class="btnGold" onclick="savePaySettings()">Save Pay Settings</button></div>
+<div class="card"><h3>💳 My Country Pay Settings</h3><input id="psBank" placeholder="Bank / MoMo Name"><input id="psName" placeholder="Account Name"><input id="psNumber" placeholder="Account / MoMo Number"><input id="psInstr" placeholder="Instructions"><button type="button" class="btnGold" onclick="savePaySettings()">Save Pay Settings</button></div>
 <div class="card"><h3>Pending Members</h3><div id="adminPending"></div></div>
 <div class="card"><h3>Pending Withdrawals</h3><div id="adminWithdrawals"></div></div>
 <div class="card"><h3>All Members</h3><div id="adminAll"></div></div>
-<div class="card"><h3>📢 Announcement</h3><input id="adminAnnInput" placeholder="Announcement for your country"><button class="btnGold" onclick="publishAnnouncement()">Publish</button></div>
-<button onclick="adminLogout()" style="margin:12px">Logout Admin</button></div></div>
+<div class="card"><h3>📢 Announcement</h3><input id="adminAnnInput" placeholder="Announcement for your country"><button type="button" class="btnGold" onclick="publishAnnouncement()">Publish</button></div>
+<button type="button" onclick="adminLogout()" style="margin:12px">Logout Admin</button></div></div>
 
 <footer>ONE BANK COOPERATIVE — OBC<br>Pan-African Cooperative • RC: OB/2026/001<br>© 2026 ONE BANK. Not licensed bank. No deposits. No guaranteed profit.<br>Ubuntu: I Am Because We Are.<br><small>Min Withdrawal $2 • Pay Small Small in 4 • Save • Shop • Earn</small></footer>
-<nav><button onclick="showPage('home')">🏠<br>Home</button><button onclick="showPage('shop')">🛒<br>Shop</button><button onclick="showPage('join')">➕<br>Join</button><button onclick="showPage('login')">🔑<br>Login</button></nav>
+<nav><button type="button" onclick="showPage('home')">🏠<br>Home</button><button type="button" onclick="showPage('shop')">🛒<br>Shop</button><button type="button" onclick="showPage('join')">➕<br>Join</button><button type="button" onclick="showPage('login')">🔑<br>Login</button></nav>
 <br><br><br>
 <script src="app.js"></script></body></html>
