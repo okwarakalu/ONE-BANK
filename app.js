@@ -1,219 +1,154 @@
-// ONE BANK COOPERATIVE - OBC - STEP 1 + 2 ONLY - MANUAL LAUNCH
-// STEP 1: Pan-African + Country Switch + Hidden Referral
-// STEP 2: Banks + Plans + Prices auto-switch by country
-// STEP 3+4 (Next): Supabase DB + 3 Admins isolation
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ONE BANK COOPERATIVE - OBC</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#F8F9FA;color:#111}
+header{background:#0A1931;color:#fff;padding:12px 14px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:20}
+.logo{width:44px;height:44px;border-radius:50%;background:#FFD700;color:#0A1931;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:18px}
+header h1{font-size:15px;margin:0;line-height:1.2}header small{color:#FFD700;font-size:10px}
+.joinBtn{margin-left:auto;background:#FFD700;color:#000;border:none;padding:10px 16px;border-radius:99px;font-weight:800}
+.topbar{background:#0A1931;color:#fff;text-align:center;font-size:11px;padding:6px;border-bottom:2px solid #FFD700}
+.unity{height:6px;background:linear-gradient(90deg,#008751 33%,#FFD700 33%,#FFD700 66%,#DE3831 66%)}
+.countrybar{display:flex;gap:8px;justify-content:center;align-items:center;padding:10px;background:#0A1931;flex-wrap:wrap}
+.countrybar button{padding:8px 14px;border-radius:99px;border:1px solid #fff;background:transparent;color:#fff;font-weight:700}
+.countrybar button.active{background:#FFD700;color:#000;border-color:#FFD700}
+#rateStrip{color:#fff;font-size:12px}
+.hero{margin:12px;border-radius:16px;overflow:hidden;background:#0A1931;color:#fff;position:relative}
+.hero img{width:100%;height:220px;object-fit:cover;opacity:.85;display:block}
+.heroTxt{position:absolute;left:16px;right:16px;bottom:16px}.heroTxt h2{font-size:28px;margin:0;line-height:1.1}.heroTxt p{font-size:13px}
+.btnG{background:#FFD700;border:none;padding:12px 18px;border-radius:99px;font-weight:800}.btnW{background:#fff;border:none;padding:12px 18px;border-radius:99px;font-weight:800}
+.card{background:#fff;margin:12px;border-radius:14px;padding:14px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+input,select{width:100%;padding:12px;margin:6px 0;border:1px solid #ddd;border-radius:10px;font-size:15px}
+.btnGold{width:100%;background:#C9A227;color:#fff;border:none;padding:14px;border-radius:99px;font-weight:800;font-size:15px}
+.btnNavy{width:100%;background:#0A1931;color:#fff;border:none;padding:13px;border-radius:99px;font-weight:800}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.prod{border:1px solid #eee;border-radius:12px;overflow:hidden;background:#fff}
+.prod img{width:100%;height:150px;object-fit:cover}.prod b{font-size:13px}.prod p{font-size:12px;margin:4px 0}
+footer{background:#0A1931;color:#fff;text-align:center;padding:16px;font-size:12px;line-height:1.6}
+nav{position:fixed;bottom:0;left:0;right:0;background:#fff;display:flex;justify-content:space-around;padding:10px 0;border-top:1px solid #ddd;z-index:20}
+nav button{border:none;background:none;font-size:12px}.hidden{display:none!important}
+.drawer{position:fixed;top:0;left:-280px;width:260px;height:100%;background:#fff;z-index:30;transition:.3s;padding:16px;box-shadow:2px 0 10px rgba(0,0,0,.2)}
+.drawer.open{left:0}.drawer button{display:block;width:100%;text-align:left;padding:12px;border:none;background:#F8F9FA;margin:6px 0;border-radius:10px;font-weight:600}
+.say{padding:14px;border-radius:12px;margin:12px 0;line-height:1.5}.say b{font-size:13px}.say p{font-size:14px;margin:6px 0 0;font-style:italic}
+.loginWrap{background:linear-gradient(160deg,#0A1931,#1A3A5A 55%,#C9A227);border-radius:14px;padding:18px}
+.loginWrap h2{color:#fff}.loginWrap p{color:#E5E7EB;font-size:12px}
+.testi{padding:12px;border-radius:12px;background:#FFF8E1;margin:10px 0}
+</style></head>
+<body>
+<div class="unity"></div>
+<div class="topbar">ONE BANK COOPERATIVE - OBC • PAN-AFRICAN COOPERATIVE • RC: OB/2026/001</div>
+<header><button onclick="toggleDrawer()" style="background:none;border:none;color:#fff;font-size:22px">☰</button>
+<div class="logo">OB</div><div><h1>ONE BANK <small>COOPERATIVE</small></h1><small>SAVE • SHOP • EARN • UBUNTU</small></div>
+<button class="joinBtn" onclick="showPage('join')">Join →</button></header>
 
-let COUNTRY = localStorage.getItem("ob_country") || "Nigeria";
-const RATES = { "Nigeria": 1353, "Ghana": 11.79, "South Africa": 17.59 };
-const SYM = { "Nigeria": "₦", "Ghana": "GH₵", "South Africa": "R" };
-const MIN_LOCAL = { "Nigeria": 2710, "Ghana": 30, "South Africa": 40 };
+<div class="countrybar">
+<button id="cNG" class="active" onclick="setCountry('Nigeria')">🇳🇬 NG</button>
+<button id="cGH" onclick="setCountry('Ghana')">🇬🇭 GH</button>
+<button id="cZA" onclick="setCountry('South Africa')">🇿🇦 ZA</button>
+<span id="rateStrip">You are in Nigeria • 1 USD = ₦1,353 • Min Withdrawal ₦2,710 ($2)</span>
+</div>
 
-const BANKS = {
-  "Nigeria": ["Access Bank","GTBank","First Bank","UBA","Zenith Bank","OPay","Moniepoint MFB","PalmPay","Kuda MFB","Fidelity Bank","Union Bank","Stanbic IBTC","Wema Bank"],
-  "Ghana": ["MTN MoMo","Telecel Cash","AirtelTigo Money","GCB Bank","Ecobank Ghana","Absa Ghana","Stanbic Ghana","Fidelity Ghana","CalBank","Zenith Ghana"],
-  "South Africa": ["Capitec","FNB","Standard Bank","ABSA","Nedbank","TymeBank","Discovery Bank","African Bank"]
-};
-const PHONE_HINT = {
-  "Nigeria": ["080... (e.g 08031234567)","10-digit NUBAN Account Number","Select Your Bank / Wallet (Nigeria)"],
-  "Ghana": ["024... / 055... (e.g 0241234567)","10-digit MoMo / Account Number","Select Your Bank / MoMo (Ghana)"],
-  "South Africa": ["082... (e.g 0821234567)","10-digit Account Number","Select Your Bank (South Africa)"]
-};
-const PLANS_NGN = [
-  {amt:10000,tier:1,d:25,i:10},{amt:15000,tier:1,d:25,i:10},{amt:20000,tier:1,d:25,i:10},
-  {amt:25000,tier:1,d:25,i:10},{amt:30000,tier:1,d:25,i:10},{amt:35000,tier:1,d:25,i:10},
-  {amt:40000,tier:2,d:30,i:10},{amt:50000,tier:2,d:30,i:10},{amt:60000,tier:2,d:30,i:10},{amt:70000,tier:2,d:30,i:10},
-  {amt:80000,tier:3,d:35,i:15},{amt:90000,tier:3,d:35,i:15},{amt:100000,tier:3,d:35,i:15},{amt:120000,tier:3,d:35,i:15}
-];
-function round10(n){ return Math.round(n/10)*10; }
-function convertNGN(ngn,c){ if(c==="Nigeria") return ngn; return round10(ngn / RATES["Nigeria"] * RATES[c]); }
-function fmt(n,c){ c=c||COUNTRY; return SYM[c] + Number(n).toLocaleString(); }
-function fmtUSD(ngn){ return "$" + (ngn / RATES["Nigeria"]).toFixed(2); }
-function getMembers(){ try{return JSON.parse(localStorage.getItem("ob_members")||"[]")}catch(e){return[]} }
-function setMembers(m){ localStorage.setItem("ob_members",JSON.stringify(m)); }
-function getWds(){ try{return JSON.parse(localStorage.getItem("ob_withdrawals")||"[]")}catch(e){return[]} }
-function setWds(w){ localStorage.setItem("ob_withdrawals",JSON.stringify(w)); }
-function getOrders(){ try{return JSON.parse(localStorage.getItem("ob_orders")||"[]")}catch(e){return[]} }
-function setOrders(o){ localStorage.setItem("ob_orders",JSON.stringify(o)); }
+<div class="drawer" id="drawer">
+<b>ONE BANK COOPERATIVE</b><p style="font-size:12px">Pan-African Cooperative</p>
+<button onclick="showPage('home')">🏠 Home</button>
+<button onclick="showPage('shop')">🛒 Shop</button>
+<button onclick="showPage('join')">➕ Join ONE BANK</button>
+<button onclick="showPage('login')">🔑 Member Login</button>
+<button onclick="showPage('admin')">🛡️ Admin Login</button>
+<button onclick="toggleDrawer()">✖ Close</button>
+<p style="font-size:11px;color:#777">v3.0 • Pan-African Cooperative • Manual Launch</p></div>
 
-// NAV
-function toggleDrawer(){ document.getElementById('drawer').classList.toggle('open'); }
-function showPage(p){ ['home','shop','join','login','savings','profile','admin'].forEach(x=>{ const el=document.getElementById('page-'+x); if(el) el.classList.toggle('hidden',x!==p); }); document.getElementById('drawer').classList.remove('open'); window.scrollTo(0,0); if(p==='shop') renderShop(); if(p==='profile') renderMemberWallet(); if(p==='admin') renderAdmin(); }
+<!-- HOME -->
+<div id="page-home">
+<div class="hero"><img src="https://images.unsplash.com/photo-1509099836639-18ba1795216d?w=900">
+<div class="heroTxt"><span style="background:#FFD700;color:#000;padding:4px 10px;border-radius:99px;font-size:11px;font-weight:800">UBUNTU • I AM BECAUSE WE ARE</span>
+<h2>ONE BANK.<br>Three Nations.<br>One People.</h2><p>Join, save, shop and earn. One family, one cooperative.</p>
+<button class="btnW" onclick="showPage('shop')">Explore Products</button> <button class="btnG" onclick="showPage('join')">Join ONE BANK</button></div></div>
 
-// STEP 1+2 - COUNTRY SWITCH - updates EVERYTHING
-function setCountry(c){
-  COUNTRY=c; localStorage.setItem("ob_country",c);
-  ['Nigeria','Ghana','South Africa'].forEach(cc=>{
-    const b=document.getElementById(cc==='Nigeria'?'cNG':cc==='Ghana'?'cGH':'cZA');
-    if(b) b.classList.toggle('active',cc===c);
-  });
-  const rs=document.getElementById('rateStrip');
-  if(rs) rs.innerText=`You are in ${c} • 1 USD = ${SYM[c]}${RATES[c]} • Min Withdrawal ${SYM[c]}${MIN_LOCAL[c]} ($2)`;
-  const t=document.getElementById('countryFormTitle'); if(t) t.innerText=`You are joining in ${c}`;
-  const h=document.getElementById('countryFormHint'); if(h) h.innerText=`Your payment will go to ${c} Admin. Your wallet will be in ${SYM[c]}.`;
-  const bl=document.getElementById('jBankLabel'); if(bl) bl.innerText=PHONE_HINT[c][2];
-  const jp=document.getElementById('jPhone'); if(jp) jp.placeholder=PHONE_HINT[c][0];
-  const ja=document.getElementById('jAcct'); if(ja) ja.placeholder=PHONE_HINT[c][1];
-  const cs=document.getElementById('calcSym'); if(cs) cs.innerText=SYM[c];
-  const m1=document.getElementById('minLabel1'); if(m1) m1.innerText=`${SYM[c]}${MIN_LOCAL[c].toLocaleString()}`;
-  const sc=document.getElementById('shopCountryNote'); if(sc) sc.innerText=`Prices in ${c} • Min Withdrawal ${SYM[c]}${MIN_LOCAL[c]} ($2)`;
-  fillBanks(); fillPlans(); renderShop(); calcSavings(); loadPaySettingsForCountry();
-}
-function fillBanks(){ const s=document.getElementById('jBank'); if(!s) return; s.innerHTML=`<option value="">-- ${PHONE_HINT[COUNTRY][2]} --</option>`+BANKS[COUNTRY].map(b=>`<option>${b}</option>`).join(''); }
-function fillPlans(){ const s=document.getElementById('jPlan'); if(!s) return; s.innerHTML=PLANS_NGN.map(p=>{ const local=convertNGN(p.amt,COUNTRY); return `<option value="${p.amt}|${p.tier}|${p.d}|${p.i}">${fmt(local,COUNTRY)} • Tier ${p.tier} • Direct ${p.d}% / Indirect ${p.i}% • ≈ ${fmtUSD(p.amt)}</option>`; }).join(''); }
+<div class="card"><h3>What is ONE BANK Cooperative?</h3><p>A trusted community cooperative helping members save together, earn rewards on every referral, shop home essentials in 4 small payments, and build your future together.</p></div>
 
-// SHOP
-const PRODUCTS=[
- {id:'gen1',name:'5.5KVA Generator',price:450000,old:520000,cat:'gen',img:'https://images.unsplash.com/photo-1581093458791-9d42e3c7e117?w=600'},
- {id:'gen2',name:'7KVA Generator',price:680000,old:750000,cat:'gen',img:'https://images.unsplash.com/photo-1581093458791-9d42e3c7e117?w=600'},
- {id:'fr1',name:'Double Door Fridge',price:380000,old:420000,cat:'fridge',img:'https://images.unsplash.com/photo-1571175443880-49e1d25b2bc5?w=600'},
- {id:'fr2',name:'Single Door Fridge',price:220000,old:260000,cat:'fridge',img:'https://images.unsplash.com/photo-1571175443880-49e1d25b2bc5?w=600'},
- {id:'fz1',name:'Chest Freezer 200L',price:310000,old:350000,cat:'freezer',img:'https://images.unsplash.com/photo-1571175443880-49e1d25b2bc5?w=600'},
- {id:'fz2',name:'Chest Freezer 300L',price:420000,old:480000,cat:'freezer',img:'https://images.unsplash.com/photo-1571175443880-49e1d25b2bc5?w=600'},
- {id:'tv1',name:'43" Smart TV',price:280000,old:320000,cat:'tv',img:'https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=600'},
- {id:'tv2',name:'55" Smart TV',price:450000,old:520000,cat:'tv',img:'https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=600'},
- {id:'h1',name:'Standing Fan',price:65000,old:80000,cat:'home',img:'https://images.unsplash.com/photo-1565151443833-29bfb2d5a3c6?w=600'},
- {id:'h2',name:'Rice Cooker',price:45000,old:55000,cat:'home',img:'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=600'},
- {id:'h3',name:'Electric Kettle',price:35000,old:45000,cat:'home',img:'https://images.unsplash.com/photo-1594213114663-d94db9b17125?w=600'},
- {id:'h4',name:'Blender Set',price:55000,old:65000,cat:'home',img:'https://images.unsplash.com/photo-1570222094114-d054a817e56b?w=600'}
-];
-let CUR_CAT='All';
-function setCat(c){ CUR_CAT=c; renderShop(); }
-function renderShop(){
-  const box=document.getElementById('shopProducts'); if(!box) return;
-  const q=(document.getElementById('searchInput')?.value||'').toLowerCase();
-  const list=PRODUCTS.filter(p=>(CUR_CAT==='All'||p.cat===CUR_CAT)&&p.name.toLowerCase().includes(q));
-  box.innerHTML=list.map(p=>{ const local=convertNGN(p.price,COUNTRY); const inst=round10(local/4);
-    return `<div class="prod"><img src="${p.img}"><div style="padding:10px"><span style="background:#FFF3CD;font-size:10px;padding:3px 8px;border-radius:99px">IN STOCK - PAY SMALL SMALL • ${COUNTRY}</span><br><b>${p.name}</b><p>⭐⭐⭐⭐⭐ (128)</p><b>${fmt(local,COUNTRY)}</b> <s style="font-size:11px;color:#999">${fmt(convertNGN(p.old,COUNTRY),COUNTRY)}</s><p>or 4 x ${fmt(inst,COUNTRY)} - Pay via ${BANKS[COUNTRY][0]}</p><button class="btnNavy" onclick="startOrder('${p.id}')">Pay Small Small →</button></div></div>`; }).join('');
-}
-function startOrder(id){
-  const cur=JSON.parse(localStorage.getItem("ob_current")||"null");
-  if(!cur) return alert("Please Login first with your Phone + Password"), showPage('login');
-  const p=PRODUCTS.find(x=>x.id===id); const total=convertNGN(p.price,COUNTRY);
-  const orders=getOrders(); orders.push({id:Date.now(),user:cur.phone,product:p.name,total,paid:0,status:'installment',country:COUNTRY}); setOrders(orders);
-  alert("✅ Order started: "+p.name+" — Pay in 4 x "+fmt(round10(total/4),COUNTRY)); renderMemberWallet();
-}
+<!-- SAYINGS - SPACED + SPICED -->
+<div class="card"><h3>🌍 Our Sayings</h3>
+<div class="say" style="background:#E8F5E9;border-left:5px solid #008751"><b>🇳🇬 NIGERIA</b><p>“When spiders unite, they can tie up a lion.”</p><small>Together, we are unstoppable.</small></div>
+<div class="say" style="background:#FEF3C7;border-left:5px solid #FFD700"><b>🇬🇭 GHANA</b><p>“One finger cannot lift a load.”</p><small>We lift it together.</small></div>
+<div class="say" style="background:#FDECEA;border-left:5px solid #DE3831"><b>🇿🇦 SOUTH AFRICA</b><p>“Umuntu ngumuntu ngabantu.”</p><small>I am because we are.</small></div>
+</div>
 
-// JOIN - Hidden Referral
-function joinMember(){
-  const name=jName.value.trim(), phone=jPhone.value.trim(), pass=jPass.value, bank=jBank.value, acct=jAcct.value.trim(), acctName=jAcctName.value.trim(), plan=jPlan.value;
-  if(!name||!phone||!pass||!bank||!acct||!acctName||!plan){ joinErr.innerText="Please fill ALL fields."; return; }
-  if(acct.length!==10){ joinErr.innerText="Account / MoMo must be 10 digits."; return; }
-  const members=getMembers(); if(members.find(m=>m.phone===phone)){ joinErr.innerText="Phone already registered. Please login."; return; }
-  const [amt,tier,d,i]=plan.split('|').map(Number);
-  const ref=(document.getElementById('jRef').value||'ONEBANK').toUpperCase();
-  const code='OB-'+(1001+members.length);
-  const m={code,name,phone,pass,country:COUNTRY,bank,acct,acctName,plan:amt,planLocal:convertNGN(amt,COUNTRY),tier,directPct:d,indirectPct:i,referral:ref,status:'pending_payment',paymentStatus:'none',directEarn:0,indirectEarn:0,saved:0,goal:200000};
-  members.push(m); setMembers(members);
-  localStorage.setItem("ob_current",JSON.stringify({phone,code}));
-  // Show Pay Card
-  document.getElementById('payCard').style.display='block';
-  payCountryLabel.innerText=COUNTRY; payAmount.innerText=fmt(convertNGN(amt,COUNTRY),COUNTRY)+" (≈ "+fmtUSD(amt)+")";
-  loadPaySettingsForCountry();
-  alert("✅ Welcome "+name+"! Your code is "+code+". Now pay "+fmt(convertNGN(amt,COUNTRY),COUNTRY)+" to "+COUNTRY+" Admin, then enter Sender + Ref.");
-  window.scrollTo(0,document.getElementById('payCard').offsetTop);
-}
-function loadPaySettingsForCountry(){
-  const s=JSON.parse(localStorage.getItem("ob_pay_"+COUNTRY)||"null");
-  if(s){ payToBank.innerText=s.bank; payToName.innerText=s.name; payToNumber.innerText=s.number; payToInstr.innerText=s.instr||""; }
-  else { payToBank.innerText=COUNTRY+" Admin Account"; payToName.innerText="ONE BANK COOPERATIVE"; payToNumber.innerText="To be set by "+COUNTRY+" Admin"; }
-}
-function submitPayment(){
-  const sender=paySender.value.trim(), ref=payRef.value.trim();
-  if(!sender||!ref) return alert("Enter Sender Name + Payment Reference");
-  const cur=JSON.parse(localStorage.getItem("ob_current")||"null"); if(!cur) return alert("Please join first");
-  const members=getMembers(); const m=members.find(x=>x.phone===cur.phone); if(!m) return;
-  m.paymentSender=sender; m.paymentRef=ref; m.paymentStatus='submitted'; m.status='pending_payment'; setMembers(members);
-  alert("✅ Payment submitted — "+m.country+" Admin will confirm. Your wallet activates after approval."); showPage('profile');
-}
+<div class="card"><h3>📢 ANNOUNCEMENT</h3><p id="homeAnnouncement">Welcome to ONE BANK. Join, save, shop and earn.</p></div>
 
-// MEMBER LOGIN / WALLET
-function memberLogin(){
-  const members=getMembers(); const m=members.find(x=>x.phone===mPhone.value.trim()&&x.pass===mPass.value);
-  if(!m){ loginErr.innerText="Wrong phone or password"; return; }
-  localStorage.setItem("ob_current",JSON.stringify({phone:m.phone,code:m.code})); showPage('profile'); renderMemberWallet();
-}
-function memberLogout(){ localStorage.removeItem("ob_current"); showPage('login'); }
-function copyLink(){ const cur=JSON.parse(localStorage.getItem("ob_current")||"null"); if(!cur) return; const link=location.origin+location.pathname+"?ref="+cur.code; navigator.clipboard?.writeText(link); alert("Copied: "+link); }
-function renderMemberWallet(){
-  const cur=JSON.parse(localStorage.getItem("ob_current")||"null"); if(!cur) return;
-  const members=getMembers(); const m=members.find(x=>x.phone===cur.phone); if(!m) return;
-  const earn=m.directEarn+m.indirectEarn; const avail=earn+m.saved - getWds().filter(w=>w.phone===m.phone&&w.status==='pending').reduce((a,w)=>a+w.amount,0) - getWds().filter(w=>w.phone===m.phone&&w.status==='paid').reduce((a,w)=>a+w.amount,0);
-  // Note: avail calc uses stored earn; pending/paid from withdrawals
-  const pending=getWds().filter(w=>w.phone===m.phone&&w.status==='pending').reduce((a,w)=>a+w.amount,0);
-  const paid=getWds().filter(w=>w.phone===m.phone&&w.status==='paid').reduce((a,w)=>a+w.amount,0);
-  const realAvail = earn + m.saved - pending - paid;
-  memName.innerText=m.name; memCode.innerText=m.code; memPlan.innerText=fmt(m.planLocal,m.country)+" • Tier "+m.tier+" • "+m.status;
-  walletMain.innerText=fmt(realAvail,m.country); walletOther.innerText=`Earnings ${fmt(earn,m.country)} • Savings ${fmt(m.saved,m.country)} • Pending ${fmt(pending,m.country)} • Paid ${fmt(paid,m.country)}`;
-  walletMin.innerText=`Min Withdrawal ${SYM[m.country]}${MIN_LOCAL[m.country].toLocaleString()} ($2) • Available ${fmt(realAvail,m.country)}`;
-  walletLiveNote.innerText=`Country: ${m.country} • Live: 1 USD = ${SYM[m.country]}${RATES[m.country]} • Status: ${m.paymentStatus==='submitted'?'Payment Submitted - Awaiting '+m.country+' Admin':m.status}`;
-  memLink.innerText=location.origin+location.pathname+"?ref="+m.code;
-  memWithdrawals.innerHTML=getWds().filter(w=>w.phone===m.phone).map(w=>`<p>${fmt(w.amount,m.country)} — ${w.status} • ${w.bank}</p>`).join('')||'<p>No withdrawals yet</p>';
-  memOrdersList.innerHTML=getOrders().filter(o=>o.user===m.phone).map(o=>`<p>${o.product} — Paid ${fmt(o.paid,m.country)} / ${fmt(o.total,m.country)} — ${o.status}</p>`).join('')||'<p>No orders yet</p>';
-}
-function requestWithdrawal(){
-  const cur=JSON.parse(localStorage.getItem("ob_current")||"null"); if(!cur) return alert("Please Login first"), showPage('login');
-  const members=getMembers(); const m=members.find(x=>x.phone===cur.phone);
-  const amt=round10(Number(wAmount.value||0));
-  const earn=m.directEarn+m.indirectEarn;
-  const pending=getWds().filter(w=>w.phone===m.phone&&w.status==='pending').reduce((a,w)=>a+w.amount,0);
-  const paid=getWds().filter(w=>w.phone===m.phone&&w.status==='paid').reduce((a,w)=>a+w.amount,0);
-  const avail=earn+m.saved-pending-paid;
-  if(amt < MIN_LOCAL[m.country]) return alert(`⛔ Min withdrawal is ${SYM[m.country]}${MIN_LOCAL[m.country]} ($2)`);
-  if(amt > avail) return alert(`⛔ You only have ${fmt(avail,m.country)} available`);
-  const wds=getWds(); wds.push({id:Date.now(),phone:m.phone,name:m.name,country:m.country,amount:amt,bank:m.bank,acct:m.acct,status:'pending'}); setWds(wds);
-  alert("✅ Withdrawal requested — "+m.country+" Admin will pay you."); renderMemberWallet();
-}
+<div class="card"><h3>🧮 Savings Calculator</h3><label>Weekly Savings <span id="calcSym">₦</span></label><input id="calcWeekly" type="number" value="5000" oninput="calcSavings()"><p id="calcResult">Save ₦5,000 weekly = ₦260,000 in 1 year</p></div>
 
-// ADMIN - STEP 3+4 will replace with Supabase. For now: country filter via email.
-let ADMIN_COUNTRY=null;
-function adminLogin(){
-  const email=aEmail.value.trim().toLowerCase(), pass=aPass.value;
-  // Temp mapping - Supabase will replace in Step 3+4
-  const map={'eagleeyesight4@gmail.com':'Nigeria','about2blowent@gmail.com':'Ghana','wonderfreeman9@gmail.com':'South Africa'};
-  if(!map[email]){ adminLoginErr.innerText="⛔ Not a country admin email"; return; }
-  // Passwords are checked in Supabase in Step 3+4. For Step 1+2, store admin country in session.
-  ADMIN_COUNTRY=map[email]; localStorage.setItem("ob_admin_country",ADMIN_COUNTRY);
-  adminLoginBox.style.display='none'; adminDash.style.display='block';
-  adminTitle.innerText=(ADMIN_COUNTRY==='Nigeria'?'🇳🇬':ADMIN_COUNTRY==='Ghana'?'🇬🇭':'🇿🇦')+' '+ADMIN_COUNTRY+' Admin Dashboard';
-  adminSub.innerText='You see ONLY '+ADMIN_COUNTRY+' • No other country';
-  renderAdmin();
-}
-function adminLogout(){ localStorage.removeItem("ob_admin_country"); location.reload(); }
-function savePaySettings(){
-  if(!ADMIN_COUNTRY) return alert("Login as admin first");
-  localStorage.setItem("ob_pay_"+ADMIN_COUNTRY,JSON.stringify({bank:psBank.value,name:psName.value,number:psNumber.value,instr:psInstr.value}));
-  alert("✅ Saved — "+ADMIN_COUNTRY+" members will now see this account at checkout"); loadPaySettingsForCountry();
-}
-function publishAnnouncement(){
-  localStorage.setItem("ob_ann_"+ADMIN_COUNTRY,adminAnnInput.value); homeAnnouncement.innerText=adminAnnInput.value; alert("✅ Published for "+ADMIN_COUNTRY);
-}
-function renderAdmin(){
-  ADMIN_COUNTRY=ADMIN_COUNTRY||localStorage.getItem("ob_admin_country"); if(!ADMIN_COUNTRY) return;
-  const members=getMembers().filter(m=>m.country===ADMIN_COUNTRY);
-  adminStats.innerText=`${ADMIN_COUNTRY}: Members ${members.length} • Pending Payment ${members.filter(m=>m.paymentStatus==='submitted').length}`;
-  adminLiveNote.innerText=`Live: You see ONLY ${ADMIN_COUNTRY}`;
-  adminPending.innerHTML=members.filter(m=>m.paymentStatus==='submitted').map(m=>`<div style="border:1px solid #eee;padding:10px;border-radius:10px;margin:6px 0"><b>${m.name}</b> • ${m.code} • ${fmt(m.planLocal,m.country)} • Sender: ${m.paymentSender} • Ref: ${m.paymentRef}<br><button class="btnGold" onclick="approveMember('${m.phone}')">Confirm Payment + Approve + Pay Split</button></div>`).join('')||'<p>No pending payments</p>';
-  adminWithdrawals.innerHTML=getWds().filter(w=>w.country===ADMIN_COUNTRY&&w.status==='pending').map(w=>`<p>${w.name} — ${fmt(w.amount,ADMIN_COUNTRY)} — ${w.bank} ${w.acct} <button onclick="payWithdrawal(${w.id})">Mark as Paid</button></p>`).join('')||'<p>No pending withdrawals</p>';
-  adminAll.innerHTML=members.map(m=>`<p>${m.code} • ${m.name} • ${fmt(m.planLocal,m.country)} • Earnings ${fmt(m.directEarn+m.indirectEarn,m.country)} • ${m.status}</p>`).join('')||'<p>No members yet in '+ADMIN_COUNTRY+'</p>';
-}
-function approveMember(phone){
-  const members=getMembers(); const m=members.find(x=>x.phone===phone); if(!m) return;
-  if(m.paymentStatus!=='submitted') return alert("⛔ CANNOT APPROVE - No payment submitted yet. Ask member to submit Sender + Ref.");
-  if(!confirm(`Confirm payment from ${m.name}? Amount ${fmt(m.planLocal,m.country)} • Sender ${m.paymentSender} • Ref ${m.paymentRef}`)) return;
-  m.paymentStatus='confirmed'; m.status='approved';
-  // SPLIT - Direct + Indirect
-  const direct=members.find(x=>x.code===m.referral);
-  if(direct){ const bonus=round10(m.plan * m.directPct/100); const bonusLocal = direct.country===m.country ? bonus : convertNGN(bonus, direct.country); direct.directEarn+=bonusLocal; }
-  if(direct){ const ind=members.find(x=>x.code===direct.referral); if(ind && ind.code!=='ONEBANK'){ const bonus2=round10(m.plan * m.indirectPct/100); const b2 = ind.country===m.country ? bonus2 : convertNGN(bonus2, ind.country); ind.indirectEarn+=b2; } }
-  setMembers(members); alert("✅ Approved + Split Paid — Referrer wallet updated"); renderAdmin();
-}
-function payWithdrawal(id){ const wds=getWds(); const w=wds.find(x=>x.id===id); if(!w) return; w.status='paid'; setWds(wds); alert("✅ Marked as Paid — Member wallet updated"); renderAdmin(); renderMemberWallet(); }
+<div class="card"><h3>💬 What Members Say</h3>
+<div class="testi"><b>⭐⭐⭐⭐⭐ Ada — Lagos, Nigeria</b><p>“I got my fridge in 4 payments. Very real.”</p></div>
+<div class="testi"><b>⭐⭐⭐⭐⭐ Kwame — Accra, Ghana</b><p>“My MoMo referral bonus came fast. ONE BANK is family.”</p></div>
+<div class="testi"><b>⭐⭐⭐⭐⭐ Thandi — Johannesburg, South Africa</b><p>“I saved small small and bought my TV. Thank you ONE BANK.”</p></div>
+</div>
 
-// CALC + INIT
-function calcSavings(){ const w=Number(calcWeekly.value||0); const yearly=round10(w*52); const local = COUNTRY==="Nigeria" ? yearly : convertNGN(yearly,COUNTRY); calcResult.innerText=`Save ${fmt(w,COUNTRY)} weekly = ${fmt(local,COUNTRY)} in 1 year (≈ $${(yearly/RATES["Nigeria"]).toFixed(2)})`; }
-(function init(){
-  const ref=new URLSearchParams(location.search).get('ref');
-  if(ref){ const el=document.getElementById('jRef'); if(el) el.value=ref.toUpperCase(); const d=document.getElementById('refDisplay'); if(d) d.innerText=ref.toUpperCase()+' (Member)'; }
-  setCountry(COUNTRY);
-  const ann=localStorage.getItem("ob_ann_"+COUNTRY); if(ann) homeAnnouncement.innerText=ann;
-})();
+<div class="card"><h3>❓ FAQ</h3>
+<p><b>Is ONE BANK a bank?</b><br>No. A cooperative. Not licensed bank. No deposits. No guaranteed profit.</p>
+<p><b>How do I pay?</b><br>Pay in 4 installments.</p>
+<p><b>How do I earn?</b><br>Invite new members into ONE BANK Cooperative with your code. Earn Direct bonus + Indirect bonus when admin approves them.</p>
+<p><b>Min withdrawal?</b><br>Only <b>$2</b> — <span id="minLabel1">₦2,710</span> in your country.</p></div>
+<div class="card" style="text-align:center"><h3>Ready to join?</h3><button class="btnGold" onclick="showPage('join')">Join ONE BANK →</button></div>
+</div>
+
+<!-- SHOP - NO SEARCH -->
+<div id="page-shop" class="hidden">
+<div class="card"><h2>Shop — Pay Small Small</h2><p>Tap any product — Pay in 4. <span id="shopCountryNote">Prices in Nigeria</span></p>
+<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px"><button onclick="setCat('All')">All</button><button onclick="setCat('gen')">Generators</button><button onclick="setCat('fridge')">Fridges</button><button onclick="setCat('freezer')">Freezers</button><button onclick="setCat('tv')">TVs</button><button onclick="setCat('home')">Home</button></div></div>
+<div id="shopProducts" class="grid" style="padding:0 12px"></div></div>
+
+<!-- JOIN - CLEAN -->
+<div id="page-join" class="hidden">
+<div class="card"><h2>Join ONE BANK</h2>
+<input id="jName" placeholder="Full Name">
+<input id="jPhone" placeholder="080... (e.g 08031234567)">
+<input id="jPass" type="password" placeholder="Create Password">
+<select id="jBank"></select>
+<input id="jAcct" placeholder="Account Number">
+<input id="jAcctName" placeholder="Account Name">
+<label style="font-size:13px;font-weight:700">Choose Plan</label>
+<select id="jPlan"></select>
+<input type="hidden" id="jRef" value="ONEBANK">
+<p id="joinErr" style="color:red;font-size:13px"></p>
+<button class="btnGold" onclick="joinMember()">Continue to Payment →</button></div>
+<div class="card" id="payCard" style="display:none"><h3>💰 Pay Membership Fee</h3>
+<p>Amount: <b id="payAmount"></b></p>
+<label>Sender Name</label><input id="paySender" placeholder="Name that sent the money">
+<label>Payment Reference</label><input id="payRef" placeholder="e.g. MoMo Ref / Bank Ref">
+<button class="btnGold" onclick="submitPayment()">I Have Paid — Submit For Confirmation</button></div></div>
+
+<!-- LOGIN - DIFFERENT BACKGROUND -->
+<div id="page-login" class="hidden"><div class="card"><div class="loginWrap"><h2>Member Login</h2><p>Your country and currency follow you. Login to open your dashboard.</p>
+<input id="mPhone" placeholder="Phone"><input id="mPass" type="password" placeholder="Password"><p id="loginErr" style="color:#FECACA"></p><button class="btnGold" onclick="memberLogin()">Login →</button><p>No account? <a href="#" onclick="showPage('join')" style="color:#FFD700">Join here</a></p></div></div></div>
+
+<!-- SAVINGS / PROFILE - NOT PUBLIC, INSIDE DASHBOARD ONLY -->
+<div id="page-savings" class="hidden"><div class="card"><h2>Savings</h2><p id="savingsGate">Please login to view your savings inside your dashboard.</p><button class="btnNavy" onclick="showPage('login')">Login</button></div></div>
+
+<!-- MEMBER DASHBOARD - ONLY AFTER LOGIN -->
+<div id="page-profile" class="hidden">
+<div class="card" id="profileGate"><h2>Member Dashboard</h2><p>Please login first.</p><button class="btnNavy" onclick="showPage('login')">Login →</button></div>
+<div id="profileDash" style="display:none">
+<div class="card"><h2 id="memName">My Wallet</h2><p>Code: <b id="memCode">-</b> • Plan: <b id="memPlan">-</b> • Status: <b id="memStatus">-</b></p>
+<h1 id="walletMain">₦0</h1><p id="walletOther"></p><p id="walletMin" style="font-size:12px"></p><p id="walletLiveNote" style="font-size:12px;color:#065F46"></p>
+<button class="btnGold" onclick="copyLink()">Copy Referral Link</button><p id="memLink" style="font-size:11px;word-break:break-all"></p></div>
+<div class="card"><h3>💰 My Savings</h3><p>Only approved members can save.</p><label>Save Amount</label><input id="saveAmt" type="number" placeholder="Amount to save"><button class="btnNavy" onclick="addSavings()">Save Now</button><div id="savingsList"></div></div>
+<div class="card"><h3>💳 Withdraw</h3><label>Withdraw Amount</label><input id="wAmount" type="number" placeholder="Min $2"><button class="btnNavy" onclick="requestWithdrawal()">Request Withdrawal</button><div id="memWithdrawals"></div></div>
+<div class="card"><h3>🛒 My Orders</h3><div id="memOrdersList"></div></div>
+<div class="card"><h3>✏️ Edit My Profile / Update Bank</h3><input id="eName" placeholder="Full Name"><select id="eBank"></select><input id="eAcct" placeholder="Account Number"><input id="eAcctName" placeholder="Account Name"><button class="btnGold" onclick="saveProfileEdit()">Save Changes</button></div>
+<button onclick="memberLogout()" style="margin:12px">Logout</button>
+</div></div>
+
+<!-- ADMIN - LOGIN ONLY, DASHBOARD HIDDEN UNTIL LOGIN -->
+<div id="page-admin" class="hidden"><div class="card" id="adminLoginBox"><h2>Admin Login</h2><input id="aEmail" placeholder="Admin Email"><input id="aPass" type="password" placeholder="Admin Password"><p id="adminLoginErr" style="color:red"></p><button class="btnNavy" onclick="adminLogin()">Admin Login →</button><br><br><button onclick="forgotAdminPassword()" style="background:none;border:none;color:#0A1931;text-decoration:underline">Forgot Password?</button></div>
+<div id="adminDash" style="display:none"><div class="card"><h2 id="adminTitle">Admin Dashboard</h2><p id="adminSub"></p><p id="adminStats"></p><p id="adminLiveNote"></p></div>
+<div class="card"><h3>💳 My Country Pay Settings</h3><input id="psBank" placeholder="Bank / MoMo Name"><input id="psName" placeholder="Account Name"><input id="psNumber" placeholder="Account / MoMo Number"><input id="psInstr" placeholder="Instructions"><button class="btnGold" onclick="savePaySettings()">Save Pay Settings</button></div>
+<div class="card"><h3>Pending Members</h3><div id="adminPending"></div></div>
+<div class="card"><h3>Pending Withdrawals</h3><div id="adminWithdrawals"></div></div>
+<div class="card"><h3>All Members</h3><div id="adminAll"></div></div>
+<div class="card"><h3>📢 Announcement</h3><input id="adminAnnInput" placeholder="Announcement for your country"><button class="btnGold" onclick="publishAnnouncement()">Publish</button></div>
+<button onclick="adminLogout()" style="margin:12px">Logout Admin</button></div></div>
+
+<footer>ONE BANK COOPERATIVE — OBC<br>Pan-African Cooperative • RC: OB/2026/001<br>© 2026 ONE BANK. Not licensed bank. No deposits. No guaranteed profit.<br>Ubuntu: I Am Because We Are.<br><small>Min Withdrawal $2 • Pay Small Small in 4 • Save • Shop • Earn</small></footer>
+<nav><button onclick="showPage('home')">🏠<br>Home</button><button onclick="showPage('shop')">🛒<br>Shop</button><button onclick="showPage('join')">➕<br>Join</button><button onclick="showPage('login')">🔑<br>Login</button></nav>
+<br><br><br>
+<script src="app.js"></script></body></html>
