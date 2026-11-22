@@ -1,79 +1,130 @@
-<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ONE BANK Cooperative - OBC</title><link rel="stylesheet" href="style.css"></head>
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ONE BANK COOPERATIVE - OBC</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#F8F9FA;color:#111}
+header{background:#0A1931;color:#fff;padding:12px 14px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:20}
+.logo{width:44px;height:44px;border-radius:50%;background:#FFD700;color:#0A1931;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:18px}
+header h1{font-size:15px;margin:0;line-height:1.2}header small{color:#FFD700;font-size:10px}
+.joinBtn{margin-left:auto;background:#FFD700;color:#000;border:none;padding:10px 16px;border-radius:99px;font-weight:800}
+.topbar{background:#0A1931;color:#fff;text-align:center;font-size:11px;padding:6px;border-bottom:2px solid #FFD700}
+.unity{height:6px;background:linear-gradient(90deg,#008751 33%,#FFD700 33%,#FFD700 66%,#DE3831 66%)}
+.countrybar{display:flex;gap:8px;justify-content:center;align-items:center;padding:10px;background:#0A1931;flex-wrap:wrap}
+.countrybar button{padding:8px 14px;border-radius:99px;border:1px solid #fff;background:transparent;color:#fff;font-weight:700}
+.countrybar button.active{background:#FFD700;color:#000;border-color:#FFD700}
+#rateStrip{color:#fff;font-size:12px}
+.hero{margin:12px;border-radius:16px;overflow:hidden;background:#0A1931;color:#fff;position:relative}
+.hero img{width:100%;height:220px;object-fit:cover;opacity:.85;display:block}
+.heroTxt{position:absolute;left:16px;right:16px;bottom:16px}.heroTxt h2{font-size:28px;margin:0;line-height:1.1}.heroTxt p{font-size:13px}
+.btnG{background:#FFD700;border:none;padding:12px 18px;border-radius:99px;font-weight:800}.btnW{background:#fff;border:none;padding:12px 18px;border-radius:99px;font-weight:800}
+.card{background:#fff;margin:12px;border-radius:14px;padding:14px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+input,select{width:100%;padding:12px;margin:6px 0;border:1px solid #ddd;border-radius:10px;font-size:15px}
+.btnGold{width:100%;background:#C9A227;color:#fff;border:none;padding:14px;border-radius:99px;font-weight:800;font-size:15px}
+.btnNavy{width:100%;background:#0A1931;color:#fff;border:none;padding:13px;border-radius:99px;font-weight:800}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.prod{border:1px solid #eee;border-radius:12px;overflow:hidden;background:#fff}
+.prod img{width:100%;height:130px;object-fit:cover}.prod b{font-size:13px}.prod p{font-size:12px;margin:4px 0}
+footer{background:#0A1931;color:#fff;text-align:center;padding:16px;font-size:12px;line-height:1.6}
+nav{position:fixed;bottom:0;left:0;right:0;background:#fff;display:flex;justify-content:space-around;padding:10px 0;border-top:1px solid #ddd;z-index:20}
+nav button{border:none;background:none;font-size:12px} .hidden{display:none!important}
+.drawer{position:fixed;top:0;left:-280px;width:260px;height:100%;background:#fff;z-index:30;transition:.3s;padding:16px;box-shadow:2px 0 10px rgba(0,0,0,.2)}
+.drawer.open{left:0}.drawer button{display:block;width:100%;text-align:left;padding:12px;border:none;background:#F8F9FA;margin:6px 0;border-radius:10px;font-weight:600}
+</style></head>
 <body>
-<div class="topbar">ONE BANK COOPERATIVE - OBC • LAGOS HQ • RC: OB/2026/001 • FREE DELIVERY IN LAGOS</div>
-<header><button class="hamb" onclick="openDrawer()">☰</button><div class="logo"><div class="logo-circle">OBC</div><div><b>ONE BANK</b><small>COOPERATIVE • SAVE • SHOP • EARN</small></div></div><button class="join-top" onclick="showPage('join')">Join →</button></header>
+<div class="unity"></div>
+<div class="topbar">ONE BANK COOPERATIVE - OBC • PAN-AFRICAN • RC: OB/2026/001 • LAGOS • ACCRA • JOHANNESBURG</div>
+<header><button onclick="toggleDrawer()" style="background:none;border:none;color:#fff;font-size:22px">☰</button>
+<div class="logo">OB</div><div><h1>ONE BANK <small>COOPERATIVE</small></h1><small>SAVE • SHOP • EARN • UBUNTU</small></div>
+<button class="joinBtn" onclick="showPage('join')">Join →</button></header>
 
-<div id="overlay" class="overlay" onclick="closeDrawer()"></div>
-<div id="drawer" class="drawer">
-<div style="text-align:center"><div class="logo-circle" style="margin:auto">OBC</div><b>ONE BANK</b><br><small>COOPERATIVE</small><p style="color:#B9975B;font-weight:800">MENU</p></div>
-<button onclick="goHome('tiers')">📚 Membership Tiers</button>
-<button onclick="goHome('calc')">🧮 Savings Calculator</button>
-<button onclick="showPage('shop')">🏭 Heavy Machinery Shop</button>
-<button onclick="goHome('testi')">💬 What Members Say</button>
-<button onclick="goHome('faq')">❓ Frequently Asked Questions</button>
-<button onclick="showPage('join')">➕ Join ONE BANK</button>
-<button onclick="showPage('login')">🔐 Member Login</button>
-<button onclick="showPage('admin')">🛡️ Admin Login</button>
-<button onclick="showPage('membership')">👥 Membership</button>
-<button onclick="showPage('org')">🏢 Organisation</button>
-<p style="font-size:11px;text-align:center;color:#888">v2.4.1 • Secure • Help & Support</p>
+<div class="countrybar">
+<button id="cNG" class="active" onclick="setCountry('Nigeria')">🇳🇬 NG</button>
+<button id="cGH" onclick="setCountry('Ghana')">🇬🇭 GH</button>
+<button id="cZA" onclick="setCountry('South Africa')">🇿🇦 ZA</button>
+<span id="rateStrip">You are in Nigeria • 1 USD = ₦1,353 • Min Withdrawal ₦2,710 ($2)</span>
 </div>
 
-<nav id="mainNav"><button data-page="home" class="active">Home</button></nav>
+<div class="drawer" id="drawer">
+<b>ONE BANK COOPERATIVE</b><p style="font-size:12px">Pan-African • Lagos • Accra • Johannesburg</p>
+<button onclick="showPage('home')">🏠 Home</button>
+<button onclick="showPage('shop')">🛒 Shop</button>
+<button onclick="showPage('join')">➕ Join ONE BANK</button>
+<button onclick="showPage('login')">🔑 Member Login</button>
+<button onclick="showPage('savings')">💰 Savings</button>
+<button onclick="showPage('profile')">👤 Profile / Wallet</button>
+<button onclick="showPage('admin')">🛡️ Admin Login</button>
+<button onclick="toggleDrawer()">✖ Close</button>
+<p style="font-size:11px;color:#777">v2.0 • Pan-African • Manual Launch</p></div>
 
-<main class="wrap">
 <!-- HOME -->
-<section id="p-home" class="page active">
-<div class="hero"><img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=900&q=80"><div class="hero-overlay"><h1>Grow with Your Community</h1><p>Save. Shop. Earn rewards with ONE BANK.</p><div class="hero-btns"><button class="btn white" style="width:auto" onclick="showPage('shop')">Explore Products</button><button class="btn gold" style="width:auto" onclick="showPage('join')">Join ONE BANK</button></div></div></div>
-
-<div class="card"><b>What is ONE BANK Cooperative?</b><p class="small">A trusted community cooperative helping members save together, earn rewards on every purchase. Save securely, shop home essentials, and build your future together.</p></div>
-
-<div class="card"><b>📢 ANNOUNCEMENT</b><p id="homeAnnouncement">Welcome to ONE BANK. Join, save, shop and earn.</p></div>
-
-<div class="search"><input id="searchInput" placeholder="Search generator, fridge, TV, freezer..." oninput="renderProducts()"><button onclick="renderProducts()">Search</button></div>
-<div class="cats"><button class="on" onclick="setCat('all',this)">All Products</button><button onclick="setCat('gen',this)">Generators</button><button onclick="setCat('fridge',this)">Fridges</button><button onclick="setCat('freezer',this)">Freezers</button><button onclick="setCat('tv',this)">TVs</button><button onclick="setCat('home',this)">Home</button></div>
-
-<div style="display:flex;justify-content:space-between;align-items:center"><h3>Featured Products</h3><a href="#" onclick="showPage('shop');return false" style="color:#B9975B;font-weight:800">See all</a></div>
-<div id="homeProducts" class="grid"></div>
-
-<div class="card" id="tiers"><button class="acc-head" onclick="toggleAcc('tiersBody')">🏆 Membership Tiers — Tap to Open ▼</button><div id="tiersBody" class="acc-body"><div class="tier"><b>Tier 1 — ₦10,000 to ₦35,000</b><br>Direct 25% • Indirect 10%</div><div class="tier"><b>Tier 2 — ₦40,000 to ₦70,000</b><br>Direct 30% • Indirect 10%</div><div class="tier"><b>Tier 3 — ₦80,000 to ₦120,000</b><br>Direct 35% • Indirect 15%</div></div></div>
-<div class="card" id="calc"><button class="acc-head" onclick="toggleAcc('calcBody')">🧮 Savings Calculator — Tap to Open ▼</button><div id="calcBody" class="acc-body"><label>Weekly Savings ₦</label><input id="calcWeekly" type="number" value="5000" oninput="calcSavings()"><div class="bar"><i id="calcBar" style="width:25%"></i></div><p id="calcResult"></p></div></div>
-<div class="card" id="testi"><button class="acc-head" onclick="toggleAcc('testiBody')">💬 What Members Say — Tap to Open ▼</button><div id="testiBody" class="acc-body"><div class="testi">⭐⭐⭐⭐⭐ "I got my fridge in 4 payments. Very real." — Ada, Lagos</div><div class="testi">⭐⭐⭐⭐⭐ "My referral earnings paid my rent." — Chidi, Abuja</div></div></div>
-<div class="card" id="faq"><button class="acc-head" onclick="toggleAcc('faqBody')">❓ Frequently Asked Questions — Tap to Open ▼</button><div id="faqBody" class="acc-body"><div class="faq-q" onclick="toggleFaq(this)">Is ONE BANK a bank?</div><div class="faq-a">No. A cooperative. Not a licensed bank. No deposits. No guaranteed profit.</div><div class="faq-q" onclick="toggleFaq(this)">How do I pay?</div><div class="faq-a">Pay in 4 installments. Free Lagos delivery.</div><div class="faq-q" onclick="toggleFaq(this)">How do I earn?</div><div class="faq-a">Invite others with your code. Earn Direct + Indirect when admin approves them.</div></div></div>
-<div class="card" style="text-align:center"><h3>Ready to join?</h3><button class="btn gold" onclick="showPage('join')">Join ONE BANK →</button></div>
-</section>
+<div id="page-home">
+<div class="hero"><img src="https://images.unsplash.com/photo-1509099836639-18ba1795216d?w=900">
+<div class="heroTxt"><span style="background:#FFD700;color:#000;padding:4px 10px;border-radius:99px;font-size:11px;font-weight:800">UBUNTU • I AM BECAUSE WE ARE</span>
+<h2>ONE BANK.<br>Three Nations.<br>One People.</h2><p>Join, save, shop and earn. Nigeria • Ghana • South Africa — same family, same bank.</p>
+<button class="btnW" onclick="showPage('shop')">Explore Products</button> <button class="btnG" onclick="showPage('join')">Join ONE BANK</button></div></div>
+<div class="card"><h3>What is ONE BANK Cooperative?</h3><p>A trusted community cooperative helping members save together, earn rewards on every referral, shop home essentials in 4 small payments, and build your future together.</p>
+<p>🇳🇬 <b>Nigeria:</b> “When spiders unite, they can tie up a lion.”<br>🇬🇭 <b>Ghana:</b> “One finger cannot lift a load.”<br>🇿🇦 <b>South Africa:</b> “Umuntu ngumuntu ngabantu.”</p></div>
+<div class="card"><h3>📢 ANNOUNCEMENT</h3><p>Welcome to ONE BANK. Join, save, shop and earn. <b id="homeAnnouncement">Manual Payment Only at Launch. Pay direct to your country admin.</b></p></div>
+<div class="card"><h3>🧮 Savings Calculator</h3><label>Weekly Savings <span id="calcSym">₦</span></label><input id="calcWeekly" type="number" value="5000" oninput="calcSavings()"><p id="calcResult">Save ₦5,000 weekly = ₦260,000 in 1 year</p></div>
+<div class="card"><h3>💬 What Members Say</h3><p>⭐⭐⭐⭐⭐ “I got my fridge in 4 payments. Very real.” — Ada, Lagos</p><p>⭐⭐⭐⭐⭐ “My referral earnings paid my rent.” — Chidi, Abuja</p></div>
+<div class="card"><h3>❓ FAQ</h3><p><b>Is ONE BANK a bank?</b><br>No. A cooperative. Not licensed bank. No deposits. No guaranteed profit.</p><p><b>How do I pay?</b><br>Pay in 4 installments. Pay direct to your country admin.</p><p><b>How do I earn?</b><br>Invite others with your code. Earn Direct + Indirect when admin approves them.</p><p><b>Min withdrawal?</b><br>Only <b>$2</b> — <span id="minLabel1">₦2,710</span> in your country.</p></div>
+<div class="card" style="text-align:center"><h3>Ready to join?</h3><button class="btnGold" onclick="showPage('join')">Join ONE BANK →</button></div>
+</div>
 
 <!-- SHOP -->
-<section id="p-shop" class="page"><h2>Heavy Machinery Shop — 12 Products</h2><p class="small">Tap any product — Pay Small Small in 4 installments.</p><div id="shopProducts" class="grid"></div></section>
-
-<!-- SAVINGS -->
-<section id="p-savings" class="page"><h2>💰 My Savings</h2><div class="card"><b id="saveName">Login to view savings</b><p>Saved: <b id="memSaved2">₦0</b> • Goal: <b id="memGoal2">₦200,000</b></p><div class="bar"><i id="memSaveBar2" style="width:0%"></i></div><label>Set Goal ₦</label><input id="saveGoalInput" type="number" placeholder="200000"><button class="btn" onclick="setSavingsGoal()">Set Goal</button><label>Add Savings ₦</label><input id="saveAmountInput" type="number" placeholder="5000"><button class="btn gold" onclick="addSavings()">Add Savings</button></div></section>
-
-<!-- PROFILE / MEMBER -->
-<section id="p-member" class="page"><h2>👤 Member Dashboard</h2><div class="card"><b id="memName">-</b><p id="memCode"></p><p id="memPlan"></p><p>Direct Referrals: <b id="memDirects">0</b></p><p id="memLink"></p><button class="btn" onclick="copyLink()">Copy My Link</button></div><div class="card"><h3>My Orders</h3><div id="memOrdersList"></div></div><div class="card"><h3>Withdrawals</h3><label>Amount ₦ (min 2000)</label><input id="wAmount" type="number"><button class="btn green" onclick="requestWithdrawal()">Request Withdrawal</button><div id="memWithdrawals"></div></div><div class="card"><h3>Update Bank Details</h3><select id="editBank"></select><input id="editAcct" placeholder="10-digit Account"><input id="editAcctName" placeholder="Account Name"><button class="btn" onclick="saveBankDetails()">Save Bank Details</button></div></section>
+<div id="page-shop" class="hidden">
+<div class="card"><h2>Shop — Pay Small Small</h2><p>Tap any product — Pay in 4. <span id="shopCountryNote">Prices in Nigeria</span></p>
+<input id="searchInput" placeholder="Search generator, fridge, TV, freezer..." oninput="renderShop()">
+<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px"><button onclick="setCat('All')">All</button><button onclick="setCat('gen')">Generators</button><button onclick="setCat('fridge')">Fridges</button><button onclick="setCat('freezer')">Freezers</button><button onclick="setCat('tv')">TVs</button><button onclick="setCat('home')">Home</button></div></div>
+<div id="shopProducts" class="grid" style="padding:0 12px"></div></div>
 
 <!-- JOIN -->
-<section id="p-join" class="page"><h2>Join ONE BANK</h2><div class="card"><div id="joinErr" class="err"></div><input id="jName" placeholder="Full Name"><input id="jPhone" placeholder="Phone e.g 080..."><input id="jPass" type="password" placeholder="Create Password"><select id="jBank"></select><input id="jAcct" placeholder="10-digit Account Number"><input id="jAcctName" placeholder="Account Name"><label>Choose Plan</label><select id="jPlan"></select><input id="jRef" placeholder="Referral Code (optional)"><button class="btn gold" onclick="doJoin()">Continue to Payment →</button></div></section>
-
-<!-- PAY -->
-<section id="p-pay" class="page"><h2>Complete Payment</h2><div class="card"><p id="payAmount"></p><p id="payCode"></p><p class="small"><b>Pay to:</b><br>Bank: Moniepoint MFB<br>Acct: 8159910220<br>Name: ONE BANK / Express Delivery</p><input id="paySender" placeholder="Sender Name"><input id="payRef" placeholder="Payment Reference"><button class="btn green" onclick="submitPayment()">I Have Paid — Submit</button></div></section>
+<div id="page-join" class="hidden">
+<div class="card"><h2>Join ONE BANK</h2><p id="countryFormTitle">You are joining in Nigeria</p>
+<p id="countryFormHint" style="font-size:12px;color:#555">Your payment will go to Nigeria Admin. Your wallet will be in ₦.</p>
+<input id="jName" placeholder="Full Name">
+<input id="jPhone" placeholder="080... (e.g 08031234567)">
+<input id="jPass" type="password" placeholder="Create Password">
+<label id="jBankLabel">Select Your Bank / Wallet (Nigeria)</label><select id="jBank"></select>
+<input id="jAcct" placeholder="10-digit NUBAN Account Number">
+<input id="jAcctName" placeholder="Account Name">
+<label>Choose Plan</label><select id="jPlan"></select>
+<input type="hidden" id="jRef" value="ONEBANK">
+<p style="font-size:12px;color:#555">Joined via: <b id="refDisplay">ONEBANK (Admin)</b> • If a member invited you, their code is applied automatically from your link.</p>
+<p id="joinErr" style="color:red;font-size:13px"></p>
+<button class="btnGold" onclick="joinMember()">Continue to Payment →</button></div>
+<div class="card" id="payCard" style="display:none"><h3>💰 Pay Membership Fee — <span id="payCountryLabel">Nigeria</span></h3>
+<p><b>Pay To (Manual Only at Launch):</b></p><p><b id="payToBank">Nigeria Admin Account</b> — <span id="payToName">ONE BANK COOPERATIVE</span> — <b id="payToNumber">To be set by Nigeria Admin</b></p>
+<p id="payToInstr" style="font-size:12px">Pay to the account above. Keep your reference. Then enter Sender + Ref below.</p>
+<label>Sender Name</label><input id="paySender" placeholder="Name that sent the money">
+<label>Payment Reference</label><input id="payRef" placeholder="e.g. MoMo Ref / Bank Ref">
+<button class="btnGold" onclick="submitPayment()">I Have Paid — Submit For Confirmation</button>
+<p style="font-size:12px">Amount: <b id="payAmount"></b> • Flutterwave online payment is OFF at launch. It will appear here when activated.</p></div></div>
 
 <!-- LOGIN -->
-<section id="p-login" class="page"><h2>Member Login</h2><div class="card"><div id="loginErr" class="err"></div><input id="mPhone" placeholder="Phone"><input id="mPass" type="password" placeholder="Password"><button class="btn" onclick="doMemberLogin()">Login →</button><p class="small">No account? <a href="#" onclick="showPage('join');return false">Join here</a></p></div></section>
+<div id="page-login" class="hidden"><div class="card"><h2>Member Login</h2><input id="mPhone" placeholder="Phone"><input id="mPass" type="password" placeholder="Password"><p id="loginErr" style="color:red"></p><button class="btnNavy" onclick="memberLogin()">Login →</button><p>No account? <a href="#" onclick="showPage('join')">Join here</a></p></div></div>
 
-<!-- MEMBERSHIP -->
-<section id="p-membership" class="page"><h2>Membership</h2><div class="card"><p class="small">Choose Tier 1, 2 or 3 on Join page. Earn Direct + Indirect when your referrals are approved by Admin. Withdraw from ₦2,000.</p><button class="btn gold" onclick="showPage('join')">Join Now →</button></div></section>
+<!-- SAVINGS -->
+<div id="page-savings" class="hidden"><div class="card"><h2>Savings</h2><p>Please login first to save. Your savings show in Profile.</p><button class="btnNavy" onclick="showPage('login')">Login to Save</button></div></div>
 
-<!-- ORG -->
-<section id="p-org" class="page"><h2>Organisation</h2><div class="card"><b>ONE BANK COOPERATIVE — OBC</b><p class="small">Lagos HQ • RC: OB/2026/001<br>Email: onebankcommunity@gmail.com<br>We are a community cooperative. Not a licensed bank. No deposits. No guaranteed profit.</p></div></section>
+<!-- PROFILE -->
+<div id="page-profile" class="hidden"><div class="card"><h2 id="memName">My Wallet</h2><p>Code: <b id="memCode">-</b> • Plan: <b id="memPlan">-</b></p>
+<h1 id="walletMain">₦0</h1><p id="walletOther">Earnings ₦0 • Savings ₦0 • Pending ₦0 • Paid ₦0</p><p id="walletMin" style="font-size:12px">Min Withdrawal ₦2,710 ($2)</p><p id="walletLiveNote" style="font-size:12px;color:#065F46"></p>
+<p>Referral Link: <b id="memLink">-</b></p><button class="btnGold" onclick="copyLink()">Copy Referral Link</button><br><br>
+<label>Withdraw Amount</label><input id="wAmount" type="number" placeholder="Min $2"><button class="btnNavy" onclick="requestWithdrawal()">Request Withdrawal</button>
+<h3>My Withdrawals</h3><div id="memWithdrawals"></div><h3>My Orders</h3><div id="memOrdersList"></div>
+<button onclick="memberLogout()" style="margin-top:12px">Logout</button></div></div>
 
 <!-- ADMIN -->
-<section id="p-admin" class="page"><h2>🛡️ Admin</h2><div class="card" id="adminLoginBox"><div id="adminLoginErr" class="err"></div><input id="aEmail" placeholder="Admin Email"><input id="aPass" type="password" placeholder="Admin Password"><button class="btn" onclick="doAdminLogin()">Admin Login</button></div><div class="card"><p id="adminStats"></p><label>Announcement</label><input id="adminAnnInput" placeholder="Type announcement"><button class="btn" onclick="publishAnn()">Publish</button><h3>Pending Members</h3><div id="adminPending"></div><h3>Pending Withdrawals</h3><div id="adminWithdrawals"></div><h3>All Members</h3><div id="adminAll"></div></div></section>
-</main>
+<div id="page-admin" class="hidden"><div class="card" id="adminLoginBox"><h2>Admin Login</h2><p style="font-size:12px">Each admin sees ONLY his country. Nigeria / Ghana / South Africa are independent.</p><input id="aEmail" placeholder="Admin Email"><input id="aPass" type="password" placeholder="Admin Password"><p id="adminLoginErr" style="color:red"></p><button class="btnNavy" onclick="adminLogin()">Admin Login →</button><p style="font-size:12px">Forgot Password? Code goes ONLY to master email: okwarakaluokwara@gmail.com</p></div>
+<div id="adminDash" style="display:none"><div class="card"><h2 id="adminTitle">Admin Dashboard</h2><p id="adminSub"></p><p id="adminStats"></p><p id="adminLiveNote"></p></div>
+<div class="card"><h3>💳 My Country Pay Settings</h3><p>Members in your country pay to THIS account.</p><input id="psBank" placeholder="Bank / MoMo Name"><input id="psName" placeholder="Account Name"><input id="psNumber" placeholder="Account / MoMo Number"><input id="psInstr" placeholder="Instructions"><button class="btnGold" onclick="savePaySettings()">Save My Country Pay Settings</button></div>
+<div class="card"><h3>Pending Members (Need Payment Confirmation)</h3><div id="adminPending"></div></div>
+<div class="card"><h3>Pending Withdrawals</h3><div id="adminWithdrawals"></div></div>
+<div class="card"><h3>All Members</h3><div id="adminAll"></div></div>
+<div class="card"><h3>📢 Announcement</h3><input id="adminAnnInput" placeholder="Announcement for your country"><button class="btnGold" onclick="publishAnnouncement()">Publish</button></div>
+<button onclick="adminLogout()" style="margin:12px">Logout Admin</button></div></div>
 
-<footer>ONE BANK COOPERATIVE — OBC<br>onebankcommunity@gmail.com • Lagos HQ • RC: OB/2026/001<br>© 2026 ONE BANK. Not a licensed bank. No deposits. No guaranteed profit.</footer>
-
-<div class="bottomnav"><button onclick="showPage('home')">🏠<br>Home</button><button onclick="showPage('shop')">🛒<br>Shop</button><button onclick="showPage('savings')">💰<br>Savings</button><button onclick="showPage('member')">👤<br>Profile</button></div>
-<script src="app.js"></script>
-</body></html>
-                                                                                                                    
+<footer>ONE BANK COOPERATIVE — OBC<br>Pan-African Cooperative • Regional Offices: Lagos (NG) • Accra (GH) • Johannesburg (ZA)<br>onebankcommunity@gmail.com • Registered Cooperative — RC: OB/2026/001<br>© 2026 ONE BANK. Not licensed bank. No deposits. No guaranteed profit.<br>Ubuntu: I Am Because We Are. 🇳🇬 Nigeria • 🇬🇭 Ghana • 🇿🇦 South Africa<br><small>Min Withdrawal $2 • Pay Small Small in 4 • Save • Shop • Earn</small></footer>
+<nav><button onclick="showPage('home')">🏠<br>Home</button><button onclick="showPage('shop')">🛒<br>Shop</button><button onclick="showPage('savings')">💰<br>Savings</button><button onclick="showPage('profile')">👤<br>Profile</button></nav>
+<br><br><br>
+<script src="app.js"></script></body></html>
