@@ -1,75 +1,219 @@
-var ADMIN_EMAIL="expressdeliverycustomercare9@gmail.com";
-var COUNTRY="Nigeria";
-var RATES={Nigeria:{sym:"₦",perUSD:1353,code:"NGN",phone:"+234",phoneHint:"Nigeria: 0803... or +234 803... (11 digits)",acctHint:"10-digit NUBAN Account Number"},Ghana:{sym:"GH₵",perUSD:11.79,code:"GHS",phone:"+233",phoneHint:"Ghana: 020... / 024... or +233 20... (10 digits)",acctHint:"MTN MoMo / Telecel / Bank Account Number"},"South Africa":{sym:"R",perUSD:17.59,code:"ZAR",phone:"+27",phoneHint:"South Africa: 082... or +27 82... (10 digits)",acctHint:"Bank Account Number"}};
-function round10(n){return Math.round(n/10)*10}
-function convertNGN(ngn,toCountry){return round10(ngn/1353*RATES[toCountry].perUSD)}
-function convertToNGN(localAmt,country){return Math.round(localAmt/RATES[country].perUSD*1353)}
-function minWithdraw(country){return round10(2*RATES[country].perUSD)}
-function fmt(amount,country){var c=country||COUNTRY;return RATES[c].sym+Number(amount).toLocaleString()}
-function fmtUSD(localAmt,country){return "$"+(localAmt/RATES[country].perUSD).toFixed(2)}
-var PAY_METHODS={Nigeria:["Bank Transfer - NIP","OPay","Moniepoint MFB","PalmPay","USSD","Verve Card","Cash to Agent"],Ghana:["MTN MoMo","Telecel Cash","AirtelTigo Money","GHIPSS Bank Transfer","Bank Card"], "South Africa":["Card - Visa / Mastercard","Ozow Instant EFT","SnapScan","Zapper","PayFast","Capitec / FNB / Standard Bank / ABSA EFT","Cash to Agent"]};
-var WITHDRAW_METHODS={Nigeria:["Bank Transfer to My Bank","OPay Wallet","Moniepoint Wallet","PalmPay Wallet","Cash Pickup - Agent"],Ghana:["MTN MoMo Wallet","Telecel Cash Wallet","AirtelTigo Money Wallet","Bank Transfer - GHIPSS"], "South Africa":["EFT to My Bank","Ozow Instant EFT","SnapScan / Zapper Payout","Card Refund","Cash Pickup - Agent"]};
-var PAY_TO={Nigeria:"Nigeria: Moniepoint MFB • 8159910220 • ONE BANK",Ghana:"Ghana: MTN MoMo • Ask Admin for MoMo Number • ONE BANK", "South Africa":"South Africa: Ozow / Instant EFT • Ask Admin for Bank Details • ONE BANK"};
-var BANKS_NG=["Access Bank","Citibank Nigeria","Ecobank Nigeria","Fidelity Bank","First Bank of Nigeria","FCMB","GTBank","Globus Bank","Heritage Bank","Keystone Bank","Kuda MFB","Moniepoint MFB","OPay","PalmPay","Polaris Bank","PremiumTrust Bank","Providus Bank","Stanbic IBTC","Standard Chartered","Sterling Bank","SunTrust Bank","Union Bank","UBA","Unity Bank","Wema Bank","Zenith Bank","ALAT by Wema","FairMoney MFB","Jaiz Bank","Lotus Bank","TAJBank","Carbon","Eyowo","GoMoney","Mintyn","Paga","Rubies Bank","Sparkle","VBank","VFD Microfinance","Branch","Chipper Cash"];
-var BANKS_GH=["GCB Bank","Stanbic Bank Ghana","Ecobank Ghana","Absa Bank Ghana","Standard Chartered Ghana","Zenith Bank Ghana","Fidelity Bank Ghana","CalBank","Access Bank Ghana","GTBank Ghana","First Atlantic Bank","Republic Bank Ghana","Consolidated Bank Ghana","ADB","UBA Ghana","First National Bank Ghana","Societe Generale Ghana","Bank of Africa Ghana","Prudential Bank","MTN MoMo","Telecel Cash","AirtelTigo Money"];
-var BANKS_ZA=["Capitec Bank","FNB - First National Bank","Standard Bank","ABSA Bank","Nedbank","African Bank","Discovery Bank","TymeBank","Bank Zero","Investec","Bidvest Bank","Grindrod Bank","Sasfin Bank","SnapScan","Zapper"];
-var PLANS_NGN=[{a:10000,t:1,d:25,i:10},{a:15000,t:1,d:25,i:10},{a:20000,t:1,d:25,i:10},{a:25000,t:1,d:25,i:10},{a:30000,t:1,d:25,i:10},{a:35000,t:1,d:25,i:10},{a:40000,t:2,d:30,i:10},{a:50000,t:2,d:30,i:10},{a:60000,t:2,d:30,i:10},{a:70000,t:2,d:30,i:10},{a:80000,t:3,d:35,i:15},{a:90000,t:3,d:35,i:15},{a:100000,t:3,d:35,i:15},{a:120000,t:3,d:35,i:15}];
-function getPlans(){return PLANS_NGN.map(function(p){return {a:convertNGN(p.a,COUNTRY),ngn:p.a,t:p.t,d:p.d,i:p.i}})}
-function getTierByLocal(localAmt){var ngn=convertToNGN(localAmt,COUNTRY);var best=PLANS_NGN[0];for(var i=0;i<PLANS_NGN.length;i++){if(PLANS_NGN[i].a<=ngn)best=PLANS_NGN[i]}return best}
-var PRODUCTS=[["5.5KVA Generator",450000,495000,"gen","https://images.unsplash.com/photo-1621905252507-b35492cc74b4?w=800&q=80"],["7.5KVA Generator",620000,680000,"gen","https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=800&q=80"],["10KVA Generator Diesel",850000,920000,"gen","https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=800&q=80"],["Double Door Fridge 320L",280000,315000,"fridge","https://images.unsplash.com/photo-1571175443880-49e1d25b2bc5?w=800&q=80"],["Single Door Fridge 180L",245000,270000,"fridge","https://images.unsplash.com/photo-1584568694244-14fbdf83bd30?w=800&q=80"],["Chest Deep Freezer 200L",320000,350000,"freezer","https://images.unsplash.com/photo-1571175443880-49e1d25b2bc5?w=800&q=80"],["Chest Deep Freezer 350L",425000,460000,"freezer","https://images.unsplash.com/photo-1584568694244-14fbdf83bd30?w=800&q=80"],["Standing Freezer 250L",365000,395000,"freezer","https://images.unsplash.com/photo-1584568694244-14fbdf83bd30?w=800&q=80"],["55 inch Smart TV 4K",485000,530000,"tv","https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=800&q=80"],["65 inch Smart TV 4K",680000,730000,"tv","https://images.unsplash.com/photo-1593784991095-a205069470b6?w=800&q=80"],["Front Load Washing Machine 8kg",385000,420000,"home","https://images.unsplash.com/photo-1626806787461-102c1bfaaea1?w=800&q=80"],["1.5HP Split Air Conditioner",365000,398000,"home","https://images.unsplash.com/photo-1631545806609-24040d63f7e5?w=800&q=80"]];
-var currentCat="all";
-function $(id){return document.getElementById(id)}
-function getMembers(){try{return JSON.parse(localStorage.getItem("ob_members")||"[]")}catch(e){return[]}}
-function saveMembers(m){localStorage.setItem("ob_members",JSON.stringify(m))}
-function getWithdrawals(){try{return JSON.parse(localStorage.getItem("ob_withdrawals")||"[]")}catch(e){return[]}}
-function saveWithdrawals(w){localStorage.setItem("ob_withdrawals",JSON.stringify(w))}
-function getOrders(){try{return JSON.parse(localStorage.getItem("ob_orders")||"[]")}catch(e){return[]}}
-function saveOrders(o){localStorage.setItem("ob_orders",JSON.stringify(o))}
-function getListings(){try{return JSON.parse(localStorage.getItem("ob_listings")||"[]")}catch(e){return[]}}
-function saveListings(l){localStorage.setItem("ob_listings",JSON.stringify(l))}
-function isLogged(){return !!(window.current||JSON.parse(localStorage.getItem("ob_current")||"null"))}
-function openDrawer(){var d=$("drawer"),o=$("overlay");if(d)d.classList.add("open");if(o)o.classList.add("show")}
-function closeDrawer(){var d=$("drawer"),o=$("overlay");if(d)d.classList.remove("open");if(o)o.classList.remove("show")}
-function setCountry(c){COUNTRY=c;localStorage.setItem("ob_country",c);var btns=document.querySelectorAll(".country-switch button");for(var i=0;i<btns.length;i++)btns[i].classList.remove("on");if(c==="Nigeria"&&$("cNG"))$("cNG").classList.add("on");if(c==="Ghana"&&$("cGH"))$("cGH").classList.add("on");if(c==="South Africa"&&$("cZA"))$("cZA").classList.add("on");if($("jCountry"))$("jCountry").value=c;updateCountryForm();fillBanks();fillPlans();fillPayMethods();renderTiers();renderProducts();renderShop();calcSavings();updateMinLabels();var labels=document.querySelectorAll(".curLabel");for(var j=0;j<labels.length;j++)labels[j].innerText=RATES[c].sym;if($("rateStrip"))$("rateStrip").innerText="You are in "+c+" • Live: 1 USD = ₦1,353 • GH₵11.79 • R17.59 • Prices in "+RATES[c].sym+" • Min Withdrawal "+fmt(minWithdraw(c),c)+" ($2)";if($("shopCountryNote"))$("shopCountryNote").innerText="Showing prices in "+RATES[c].sym+" for "+c+" • Min Withdrawal "+fmt(minWithdraw(c),c);if($("faqPay"))$("faqPay").innerText="Pay in 4 installments. "+c+": "+PAY_METHODS[c].join(" / ")+". Min Withdrawal "+fmt(minWithdraw(c),c)+" ($2).";if($("joinCountryNote"))$("joinCountryNote").innerText="You selected "+c+" — form, phone, bank, payment & withdrawal now show "+c+" options.";renderMemberWallet();renderAdminWallets()}
-function updateMinLabels(){var m1=minWithdraw(COUNTRY);if($("minWithdrawLabel"))$("minWithdrawLabel").innerText=fmt(m1,COUNTRY)+" ($2)";if($("adminMinAll"))$("adminMinAll").innerText="NG "+fmt(minWithdraw("Nigeria"),"Nigeria")+" • GH "+fmt(minWithdraw("Ghana"),"Ghana")+" • ZA "+fmt(minWithdraw("South Africa"),"South Africa")+" = $2 each";if($("wAmount"))$("wAmount").placeholder="Min "+fmt(m1,COUNTRY)}
-function updateCountryForm(){var R=RATES[COUNTRY];var flag=COUNTRY==="Nigeria"?"🇳🇬":COUNTRY==="Ghana"?"🇬🇭":"🇿🇦";if($("countryFormTitle"))$("countryFormTitle").innerText=flag+" "+COUNTRY+" Form — Currency "+R.sym+" ("+R.code+")";if($("countryFormHint"))$("countryFormHint").innerText="Phone: "+R.phoneHint+" • Account: "+R.acctHint+" • Pay: "+PAY_METHODS[COUNTRY].join(", ")+" • Withdraw: "+WITHDRAW_METHODS[COUNTRY].join(", ")+" • Min Withdrawal: "+fmt(minWithdraw(COUNTRY),COUNTRY)+" ($2)";if($("jPhoneLabel"))$("jPhoneLabel").innerText="Phone Number ("+COUNTRY+" — "+R.phone+")";if($("jPhone"))$("jPhone").placeholder=COUNTRY==="Nigeria"?"080... (e.g 08031234567)":COUNTRY==="Ghana"?"020... (e.g 0241234567)":"082... (e.g 0821234567)";if($("jPhoneHint"))$("jPhoneHint").innerText=R.phoneHint;if($("jBankLabel"))$("jBankLabel").innerText="Bank / Wallet ("+COUNTRY+")";if($("jAcctLabel"))$("jAcctLabel").innerText="Account / MoMo Number ("+COUNTRY+")";if($("jAcct"))$("jAcct").placeholder=R.acctHint;if($("jAcctHint"))$("jAcctHint").innerText=R.acctHint}
-function showPage(id){if((id==="member"||id==="savings")&&!isLogged()){alert("Please Login first with your Phone + Password");id="login"}if(id==="admin"){var isA=localStorage.getItem("ob_admin")==="1";if($("adminLoginBox"))$("adminLoginBox").style.display=isA?"none":"block";if($("adminDash"))$("adminDash").style.display=isA?"block":"none"}var pages=document.querySelectorAll(".page");for(var i=0;i<pages.length;i++)pages[i].classList.remove("active");var t=$("p-"+id);if(t)t.classList.add("active");closeDrawer();window.scrollTo(0,0);if(id==="admin")renderAdmin();if(id==="member"||id==="savings")renderMember();if(id==="shop")renderShop();if(id==="home")renderHome();if(id==="join")updateCountryForm();updateMinLabels()}
-function toggleAcc(id){var el=$(id);if(el)el.classList.toggle("open")}
-function toggleFaq(el){var a=el.nextElementSibling;if(a)a.classList.toggle("open")}
-function goHome(sec){showPage("home");setTimeout(function(){var b=$(sec+"Body");if(b)b.classList.add("open");var el=$(sec);if(el)el.scrollIntoView({behavior:"smooth"})},300)}
-function setCat(c,btn){currentCat=c;var b=document.querySelectorAll(".cats button");for(var i=0;i<b.length;i++)b[i].classList.remove("on");if(btn)btn.classList.add("on");renderProducts();renderShop()}function memberWallet(m){var earnings=Number(m.directEarn||0)+Number(m.indirectEarn||0);var saved=Number(m.saved||0);var total=earnings+saved;var pendingW=getWithdrawals().filter(function(w){return w.phone===m.phone&&w.status==="pending"}).reduce(function(s,w){return s+Number(w.amount||0)},0);var paidW=getWithdrawals().filter(function(w){return w.phone===m.phone&&w.status==="paid"}).reduce(function(s,w){return s+Number(w.amount||0)},0);var available=Math.max(0,total-paidW-pendingW);return {earnings:earnings,saved:saved,total:total,pendingW:pendingW,paidW:paidW,available:available}}
-function renderMemberWallet(){var m=window.current||JSON.parse(localStorage.getItem("ob_current")||"null");if(!m||!$("walletMain"))return;var fresh=getMembers().find(function(x){return x.phone===m.phone})||m;var ctry=fresh.country||COUNTRY;var w=memberWallet(fresh);var inNG=convertNGN(convertToNGN(w.available,ctry),"Nigeria");var inGH=convertNGN(convertToNGN(w.available,ctry),"Ghana");var inZA=convertNGN(convertToNGN(w.available,ctry),"South Africa");if($("walletMain"))$("walletMain").innerText=fmt(w.available,ctry)+" available • "+fmtUSD(w.available,ctry);if($("walletOther"))$("walletOther").innerHTML="Earnings: "+fmt(w.earnings,ctry)+" • Savings: "+fmt(w.saved,ctry)+"<br>Pending Withdrawal: "+fmt(w.pendingW,ctry)+" • Paid Out: "+fmt(w.paidW,ctry)+"<br>Also = "+fmt(inNG,"Nigeria")+" • "+fmt(inGH,"Ghana")+" • "+fmt(inZA,"South Africa");if($("walletMin"))$("walletMin").innerText="Minimum Withdrawal: "+fmt(minWithdraw(ctry),ctry)+" = $2 • You can withdraw "+fmt(w.available,ctry);if($("walletLiveNote"))$("walletLiveNote").innerText="Live • "+ctry+" • 1 USD = ₦1,353 • GH₵11.79 • R17.59 • Updated "+new Date().toLocaleTimeString()}
-function renderAdminWallets(){var members=getMembers();function sumCountry(c,field){return members.filter(function(m){return (m.country||"Nigeria")===c}).reduce(function(s,m){var w=memberWallet(m);return s+(field==="available"?w.available:field==="earnings"?w.earnings:w.saved)},0)}function countCountry(c){return members.filter(function(m){return (m.country||"Nigeria")===c}).length}if($("adminWalletNG"))$("adminWalletNG").innerText=fmt(sumCountry("Nigeria","available"),"Nigeria")+" available";if($("adminWalletNGCount"))$("adminWalletNGCount").innerText=countCountry("Nigeria")+" members • Earnings "+fmt(sumCountry("Nigeria","earnings"),"Nigeria");if($("adminWalletGH"))$("adminWalletGH").innerText=fmt(sumCountry("Ghana","available"),"Ghana")+" available";if($("adminWalletGHCount"))$("adminWalletGHCount").innerText=countCountry("Ghana")+" members • Earnings "+fmt(sumCountry("Ghana","earnings"),"Ghana");if($("adminWalletZA"))$("adminWalletZA").innerText=fmt(sumCountry("South Africa","available"),"South Africa")+" available";if($("adminWalletZACount"))$("adminWalletZACount").innerText=countCountry("South Africa")+" members • Earnings "+fmt(sumCountry("South Africa","earnings"),"South Africa");if($("adminLiveNote"))$("adminLiveNote").innerText="Live Wallets • Updated "+new Date().toLocaleTimeString()+" • 1 USD = ₦1,353 • GH₵11.79 • R17.59"}
-function cardHTML(p,i){var local=convertNGN(p[1],COUNTRY);var oldLocal=convertNGN(p[2],COUNTRY);var per=round10(local/4);return "<div class='prod'><img src='"+p[4]+"'><div class='prod-body'><span class='tag'>IN STOCK - PAY SMALL SMALL • "+COUNTRY+"</span><b>"+p[0]+"</b><div class='stars'>★★★★★ (128)</div><div class='price'>"+fmt(local)+" <span class='old'>"+fmt(oldLocal)+"</span></div><small>or 4 x "+fmt(per)+" - Pay via "+PAY_METHODS[COUNTRY][0]+"</small><button class='btn' style='margin-top:10px;padding:11px' onclick='startOrder("+i+")'>Pay Small Small →</button></div></div>"}
-function renderProducts(){var q=(($("searchInput")&&$("searchInput").value)||"").toLowerCase();var html="";for(var i=0;i<PRODUCTS.length;i++){var p=PRODUCTS[i];if(currentCat!=="all"&&p[3]!==currentCat)continue;if(q&&p[0].toLowerCase().indexOf(q)===-1)continue;html+=cardHTML(p,i)}var listings=getListings().filter(function(l){return l.status==="approved"});for(var j=0;j<listings.length;j++){var L=listings[j];if(currentCat!=="all"&&L.cat!==currentCat)continue;if(q&&L.name.toLowerCase().indexOf(q)===-1)continue;html+="<div class='prod'><img src='"+(L.img||PRODUCTS[0][4])+"'><div class='prod-body'><span class='tag'>MEMBER LISTING • "+(L.country||"Nigeria")+"</span><b>"+L.name+"</b><br><small>Seller: "+L.seller+"</small><div class='price'>"+fmt(L.price,L.country||COUNTRY)+"</div><button class='btn' onclick='contactSeller(\""+L.seller+"\")'>Contact Seller →</button></div></div>"}if(!html)html="<p>No product found.</p>";if($("homeProducts"))$("homeProducts").innerHTML=html}
-function renderShop(){var html="";for(var i=0;i<PRODUCTS.length;i++)html+=cardHTML(PRODUCTS[i],i);var listings=getListings().filter(function(l){return l.status==="approved"});for(var j=0;j<listings.length;j++){var L=listings[j];html+="<div class='prod'><img src='"+(L.img||PRODUCTS[0][4])+"'><div class='prod-body'><span class='tag'>MEMBER LISTING</span><b>"+L.name+"</b><br><small>Seller: "+L.seller+" • "+(L.country||"")+"</small><div class='price'>"+fmt(L.price,L.country||COUNTRY)+"</div><button class='btn' onclick='contactSeller(\""+L.seller+"\")'>Contact Seller →</button></div></div>"}if($("shopProducts"))$("shopProducts").innerHTML=html}
-function contactSeller(name){alert("Contact Admin to reach seller "+name)}
-function changeCountry(){setCountry($("jCountry").value);showPage("join")}
-function fillBanks(){var list=COUNTRY==="Ghana"?BANKS_GH:COUNTRY==="South Africa"?BANKS_ZA:BANKS_NG;var h='<option value="">-- Select Your Bank / Wallet ('+COUNTRY+') --</option>';for(var i=0;i<list.length;i++)h+='<option>'+list[i]+'</option>';if($("jBank"))$("jBank").innerHTML=h;if($("editBank"))$("editBank").innerHTML=h}
-function fillPayMethods(){var pays=PAY_METHODS[COUNTRY];var draws=WITHDRAW_METHODS[COUNTRY];function opts(a){return a.map(function(m){return "<option>"+m+"</option>"}).join("")}if($("jPayMethod"))$("jPayMethod").innerHTML=opts(pays);if($("jWithdrawMethod"))$("jWithdrawMethod").innerHTML=opts(draws);if($("savePayMethod"))$("savePayMethod").innerHTML=opts(pays);if($("saveWithdrawMethod"))$("saveWithdrawMethod").innerHTML=opts(draws);if($("wPayMethod"))$("wPayMethod").innerHTML=opts(pays);if($("wWithdrawMethod"))$("wWithdrawMethod").innerHTML=opts(draws);if($("payPayMethod"))$("payPayMethod").innerHTML=opts(pays);if($("payWithdrawMethod"))$("payWithdrawMethod").innerHTML=opts(draws);if($("editWithdrawMethod"))$("editWithdrawMethod").innerHTML=opts(draws)}
-function fillPlans(){var s=$("jPlan");if(!s)return;s.innerHTML=getPlans().map(function(p){return "<option value='"+p.a+"'>"+fmt(p.a)+" • Tier "+p.t+" • Direct "+p.d+"% / Indirect "+p.i+"% • ≈ $"+(p.ngn/1353).toFixed(2)+"</option>"}).join("");if($("planConvert"))$("planConvert").innerText="All amounts rounded to nearest 10 • In USD: Tier 1 ≈ $7-$26 • Tier 2 ≈ $30-$52 • Tier 3 ≈ $59-$89 • Live: 1 USD = ₦1,353 / GH₵11.79 / R17.59"}
-function renderTiers(){var html="<div class='tier'><b>Tier 1 — Rounded to nearest 10</b><br>NG: "+fmt(convertNGN(10000,"Nigeria"),"Nigeria")+"-"+fmt(convertNGN(35000,"Nigeria"),"Nigeria")+" • GH: "+fmt(convertNGN(10000,"Ghana"),"Ghana")+"-"+fmt(convertNGN(35000,"Ghana"),"Ghana")+" • ZA: "+fmt(convertNGN(10000,"South Africa"),"South Africa")+"-"+fmt(convertNGN(35000,"South Africa"),"South Africa")+"<br>Direct 25% • Indirect 10%</div><div class='tier'><b>Tier 2 — Rounded to nearest 10</b><br>NG: "+fmt(convertNGN(40000,"Nigeria"),"Nigeria")+"-"+fmt(convertNGN(70000,"Nigeria"),"Nigeria")+" • GH: "+fmt(convertNGN(40000,"Ghana"),"Ghana")+"-"+fmt(convertNGN(70000,"Ghana"),"Ghana")+" • ZA: "+fmt(convertNGN(40000,"South Africa"),"South Africa")+"-"+fmt(convertNGN(70000,"South Africa"),"South Africa")+"<br>Direct 30% • Indirect 10%</div><div class='tier'><b>Tier 3 — Rounded to nearest 10</b><br>NG: "+fmt(convertNGN(80000,"Nigeria"),"Nigeria")+"-"+fmt(convertNGN(120000,"Nigeria"),"Nigeria")+" • GH: "+fmt(convertNGN(80000,"Ghana"),"Ghana")+"-"+fmt(convertNGN(120000,"Ghana"),"Ghana")+" • ZA: "+fmt(convertNGN(80000,"South Africa"),"South Africa")+"-"+fmt(convertNGN(120000,"South Africa"),"South Africa")+"<br>Direct 35% • Indirect 15%</div>";if($("tiersList"))$("tiersList").innerHTML=html;if($("tiersList2"))$("tiersList2").innerHTML=html}
-function calcSavings(){var w=Number(($("calcWeekly")&&$("calcWeekly").value)||0);var y=round10(w*52);if($("calcResult"))$("calcResult").innerText="Save "+fmt(w)+" weekly = "+fmt(y)+" in 1 year";if($("calcConvert"))$("calcConvert").innerText="≈ $"+(w/RATES[COUNTRY].perUSD).toFixed(2)+" weekly • Pay via "+PAY_METHODS[COUNTRY][0];if($("calcBar"))$("calcBar").style.width=Math.min(100,Math.round(w/(COUNTRY==="Nigeria"?20000:COUNTRY==="Ghana"?175:260)*100))+"%"}
-function doJoin(){var name=$("jName").value.trim();var phone=$("jPhone").value.trim();var pass=$("jPass").value;var bank=$("jBank").value;var acct=$("jAcct").value.trim();var acctName=$("jAcctName").value.trim();var planLocal=Number($("jPlan").value);var payMethod=$("jPayMethod")?$("jPayMethod").value:"";var withdrawMethod=$("jWithdrawMethod")?$("jWithdrawMethod").value:"";var ref=($("jRef").value||"").trim()||"ONEBANK";var err=$("joinErr");if(!name||!phone||!pass||!bank||!acct||!acctName){err.style.display="block";err.innerText="Fill all fields.";return}if(COUNTRY==="Nigeria"&&acct.length!==10){err.style.display="block";err.innerText="Nigeria Account must be 10 digits.";return}if(getMembers().find(function(m){return m.phone===phone})){err.style.display="block";err.innerText="Phone already registered. Login.";return}var tier=getTierByLocal(planLocal);var ngnAmt=convertToNGN(planLocal,COUNTRY);var code="OB-100"+(getMembers().length+1);var member={code:code,name:name,phone:phone,password:pass,country:COUNTRY,bank:bank,acct:acct,acctName:acctName,payMethod:payMethod,withdrawMethod:withdrawMethod,plan:planLocal,amount:planLocal,amountNGN:ngnAmt,tier:tier.t,directPct:tier.d,indirectPct:tier.i,referral:ref,status:"pending",directEarn:0,indirectEarn:0,saved:0,goal:convertNGN(200000,COUNTRY)};var list=getMembers();list.push(member);saveMembers(list);window.current=member;localStorage.setItem("ob_current",JSON.stringify(member));$("payAmount").innerText="Pay "+fmt(planLocal)+" - Tier "+tier.t+" - "+COUNTRY+" via "+payMethod+" • Rounded to nearest 10";$("payCode").innerText="Your Member Code: "+code;if($("payMethodInfo"))$("payMethodInfo").innerText="Payment: "+payMethod+" • Withdrawal: "+withdrawMethod+" • Bank: "+bank+" • USD ≈ $"+(ngnAmt/1353).toFixed(2);if($("payToInfo"))$("payToInfo").innerText=PAY_TO[COUNTRY];fillPayMethods();if($("payPayMethod"))$("payPayMethod").value=payMethod;if($("payWithdrawMethod"))$("payWithdrawMethod").value=withdrawMethod;showPage("pay")}
-function submitPayment(){var s=$("paySender").value.trim();var r=$("payRef").value.trim();if(!s||!r){alert("Enter Sender Name and Reference");return}alert("Submitted for approval. Wait for admin approval, then login.");showPage("login")}
-function doMemberLogin(){var phone=$("mPhone").value.trim();var pass=$("mPass").value;var err=$("loginErr");var m=getMembers().find(function(x){return x.phone===phone});if(!m){err.style.display="block";err.innerText="No member found. Please Join first.";return}if(m.password!==pass){err.style.display="block";err.innerText="Wrong password.";return}if(m.status!=="approved"){err.style.display="block";err.innerText="Pending admin approval.";return}window.current=m;localStorage.setItem("ob_current",JSON.stringify(m));if(m.country)setCountry(m.country);showPage("member")}
-function logoutMember(){window.current=null;localStorage.removeItem("ob_current");alert("Logged out. Ubuntu — see you soon.");showPage("home")}function doAdminLogin(){var email=$("aEmail").value.trim();var pass=$("aPass").value;var err=$("adminLoginErr");if(email!==ADMIN_EMAIL){err.style.display="block";err.innerText="Wrong admin email.";return}if(!pass){err.style.display="block";err.innerText="Enter admin password.";return}if($("adminLoginBox"))$("adminLoginBox").style.display="none";if($("adminDash"))$("adminDash").style.display="block";localStorage.setItem("ob_admin","1");renderAdmin();alert("Admin logged in")}
-function adminLogout(){localStorage.removeItem("ob_admin");if($("adminLoginBox"))$("adminLoginBox").style.display="block";if($("adminDash"))$("adminDash").style.display="none";showPage("home")}
-function renderHome(){renderProducts();var ann=localStorage.getItem("ob_announcement")||"Welcome to ONE BANK. Join, save, shop and earn.";if($("homeAnnouncement"))$("homeAnnouncement").innerText=ann}
-function startOrder(idx){var p=PRODUCTS[idx];var m=window.current||JSON.parse(localStorage.getItem("ob_current")||"null");if(!m){alert("Please Join / Login first, then choose Pay Small Small.");showPage("join");return}var local=convertNGN(p[1],m.country||COUNTRY);var orders=getOrders();orders.unshift({id:Date.now().toString(),phone:m.phone,name:p[0],price:local,paid:0,total:local,status:"installment",country:m.country||COUNTRY,payMethod:m.payMethod,withdrawMethod:m.withdrawMethod});saveOrders(orders);alert(p[0]+" added in "+fmt(local,m.country||COUNTRY)+". Pay in 4 x "+fmt(round10(local/4),m.country||COUNTRY)+" via "+(m.payMethod||"")+".");showPage("member")}
-function renderMember(){var m=window.current||JSON.parse(localStorage.getItem("ob_current")||"null");if(!m){showPage("login");return}var fresh=getMembers().find(function(x){return x.phone===m.phone})||m;window.current=fresh;renderMemberWallet();var tier=getTierByLocal(fresh.amount);if($("memName"))$("memName").innerText=fresh.name+" ("+(fresh.country||"Nigeria")+")";if($("saveName"))$("saveName").innerText=fresh.name+" - "+fresh.code;if($("memCode"))$("memCode").innerText=fresh.code;if($("memPlan"))$("memPlan").innerText="Plan: "+fmt(fresh.amount,fresh.country||COUNTRY)+" - Tier "+tier.t+" - Direct "+tier.d+"% / Indirect "+tier.i+"% - Earnings: "+fmt(Number(fresh.directEarn||0)+Number(fresh.indirectEarn||0),fresh.country||COUNTRY);if($("memPayInfo"))$("memPayInfo").innerText="💳 Pay: "+(fresh.payMethod||"")+" • 🏧 Withdraw: "+(fresh.withdrawMethod||"")+" • Bank: "+(fresh.bank||"");var directs=getMembers().filter(function(x){return x.referral===fresh.code});if($("memDirects"))$("memDirects").innerText=directs.length;if($("memLink"))$("memLink").innerText="Your Link: "+location.origin+"/?ref="+fresh.code;if($("memSaved2"))$("memSaved2").innerText=fmt(fresh.saved||0,fresh.country||COUNTRY);var goal=Number(fresh.goal||convertNGN(200000,fresh.country||COUNTRY));if($("memGoal2"))$("memGoal2").innerText=fmt(goal,fresh.country||COUNTRY);var pct=goal>0?Math.min(100,Math.round(Number(fresh.saved||0)/goal*100)):0;if($("memSaveBar2"))$("memSaveBar2").style.width=pct+"%";var w=getWithdrawals().filter(function(x){return x.phone===fresh.phone});if($("memWithdrawals"))$("memWithdrawals").innerHTML=!w.length?"<p>No withdrawals yet</p>":w.map(function(x){return "<div>"+fmt(x.amount,fresh.country||COUNTRY)+" - "+x.status+" via "+(x.withdrawMethod||x.payMethod||"")+"</div>"}).join("");var orders=getOrders().filter(function(x){return x.phone===fresh.phone});if($("memOrdersList"))$("memOrdersList").innerHTML=!orders.length?"<p>No orders yet. Go to Shop - Pay Small Small.</p>":orders.map(function(o){var left=o.total-o.paid;return "<div style='border-bottom:1px solid #eee;padding:8px 0'><b>"+o.name+"</b><br>Total "+fmt(o.total,fresh.country||COUNTRY)+" - Paid "+fmt(o.paid,fresh.country||COUNTRY)+" - Left "+fmt(left,fresh.country||COUNTRY)+" via "+(o.payMethod||"")+"<br><button class='btn gold' style='width:auto;margin-top:6px;padding:8px 16px' onclick=\"payInstallment('"+o.id+"')\">Pay Next "+fmt(round10(o.total/4),fresh.country||COUNTRY)+"</button></div>"}).join("");var myL=getListings().filter(function(x){return x.phone===fresh.phone});if($("myListings"))$("myListings").innerHTML=!myL.length?"<p>No listings yet</p>":myL.map(function(x){return "<div>"+x.name+" - "+fmt(x.price,fresh.country||COUNTRY)+" - "+x.status+"</div>"}).join("");if($("editBank"))$("editBank").value=fresh.bank||"";if($("editAcct"))$("editAcct").value=fresh.acct||"";if($("editAcctName"))$("editAcctName").value=fresh.acctName||"";if($("editWithdrawMethod"))$("editWithdrawMethod").value=fresh.withdrawMethod||"";updateMinLabels()}
-function submitListing(){var m=window.current||JSON.parse(localStorage.getItem("ob_current")||"null");if(!m){alert("Login first");showPage("login");return}var name=$("listName").value.trim();var price=Number($("listPrice").value);var img=$("listImg").value.trim();var cat=$("listCat").value;if(!name||!price){alert("Enter Product Name and Price");return}var l=getListings();l.unshift({id:Date.now().toString(),phone:m.phone,seller:m.name,country:m.country||COUNTRY,name:name,price:round10(price),img:img,cat:cat,status:"pending"});saveListings(l);renderMember();alert("Listing sent to Admin for approval. Price rounded to nearest 10: "+fmt(round10(price),m.country||COUNTRY))}
-function approveListing(id){var l=getListings().map(function(x){if(x.id===id)return Object.assign({},x,{status:"approved"});return x});saveListings(l);renderAdmin();alert("Listing Approved - Now in Shop")}
-function rejectListing(id){var l=getListings().filter(function(x){return x.id!==id});saveListings(l);renderAdmin()}
-function setSavingsGoal(){var g=Number($("saveGoalInput").value);if(!g){alert("Enter goal");return}var m=window.current;var list=getMembers().map(function(x){if(x.phone===m.phone)return Object.assign({},x,{goal:round10(g)});return x});saveMembers(list);renderMember();alert("Savings goal set to "+fmt(round10(g),m.country||COUNTRY))}
-function addSavings(){var amt=Number($("saveAmountInput").value);if(!amt||amt<100){alert("Enter amount");return}var m=window.current;var method=$("savePayMethod")?$("savePayMethod").value:"";var wMethod=$("saveWithdrawMethod")?$("saveWithdrawMethod").value:"";var list=getMembers().map(function(x){if(x.phone===m.phone)return Object.assign({},x,{saved:round10(Number(x.saved||0)+amt),payMethod:method,withdrawMethod:wMethod});return x});saveMembers(list);renderMember();alert(fmt(round10(amt),m.country||COUNTRY)+" added via "+method)}
-function payInstallment(id){var orders=getOrders().map(function(o){if(o.id===id){var next=round10(o.total/4);var paid=Math.min(o.total,o.paid+next);return Object.assign({},o,{paid:paid,status:paid>=o.total?"completed":"installment"})}return o});saveOrders(orders);renderMember();alert("Installment paid.")}
-function approveMember(phone){var members=getMembers();var target=members.find(function(m){return m.phone===phone});if(!target)return;var ngn=target.amountNGN||convertToNGN(target.amount,target.country||"Nigeria");var directAmtNGN=Math.round(ngn*(target.directPct||25)/100);var indirectAmtNGN=Math.round(ngn*(target.indirectPct||10)/100);var directCode=target.referral;var directMember=members.find(function(x){return x.code===directCode});var indirectCode=directMember?directMember.referral:null;members=members.map(function(m){if(m.code===directCode){var add=convertNGN(directAmtNGN,m.country||"Nigeria");return Object.assign({},m,{directEarn:round10(Number(m.directEarn||0)+add)})}if(indirectCode&&m.code===indirectCode){var add2=convertNGN(indirectAmtNGN,m.country||"Nigeria");return Object.assign({},m,{indirectEarn:round10(Number(m.indirectEarn||0)+add2)})}return m});members=members.map(function(m){if(m.phone===phone)return Object.assign({},m,{status:"approved"});return m});saveMembers(members);renderAdmin();renderAdminWallets();alert("Approved! Earnings rounded to nearest 10 in each member's currency.")}
-function payWithdrawal(id){var w=getWithdrawals().map(function(x){if(x.id===id)return Object.assign({},x,{status:"paid"});return x});saveWithdrawals(w);renderAdmin();alert("Marked as Paid.")}
-function renderAdmin(){var members=getMembers();var withdrawals=getWithdrawals();var pending=members.filter(function(m){return m.status!=="approved"});var pendingW=withdrawals.filter(function(w){return w.status==="pending"});var pendingL=getListings().filter(function(l){return l.status==="pending"});renderAdminWallets();updateMinLabels();if($("adminStats"))$("adminStats").innerText="Total: "+members.length+" - Pending: "+pending.length+" - Listings: "+pendingL.length+" - Withdrawals: "+pendingW.length+" • NG: "+members.filter(function(m){return m.country==="Nigeria"}).length+" • GH: "+members.filter(function(m){return m.country==="Ghana"}).length+" • ZA: "+members.filter(function(m){return m.country==="South Africa"}).length;if($("adminPending"))$("adminPending").innerHTML=!pending.length?"<p>No pending</p>":pending.map(function(m){return "<div style='border:1px solid #eee;padding:10px;margin:8px 0;border-radius:10px'><b>"+m.name+"</b> ("+(m.country||"")+") - "+m.phone+" - "+fmt(m.amount,m.country||COUNTRY)+" - Tier "+m.tier+" • Pay: "+(m.payMethod||"")+" • Withdraw: "+(m.withdrawMethod||"")+"<br><button onclick=\"approveMember('"+m.phone+"')\" style='background:#065F46;color:#fff;padding:10px 16px;border:0;border-radius:99px;margin-top:8px'>Approve & Auto-Pay Split</button></div>"}).join("");if($("adminWithdrawals"))$("adminWithdrawals").innerHTML=!pendingW.length?"<p>No withdrawals</p>":pendingW.map(function(w){return "<div style='border:1px solid #eee;padding:10px;margin:8px 0'><b>"+w.name+"</b> - "+fmt(w.amount,w.country||COUNTRY)+" via "+(w.withdrawMethod||w.payMethod||"")+"<br><button onclick=\"payWithdrawal('"+w.id+"')\" style='background:#0A1931;color:#fff;padding:10px 16px;border:0;border-radius:99px'>Mark as Paid</button></div>"}).join("");if($("adminListings"))$("adminListings").innerHTML=!pendingL.length?"<p>No pending listings</p>":pendingL.map(function(l){return "<div style='border:1px solid #eee;padding:10px;margin:8px 0'><b>"+l.name+"</b> - "+fmt(l.price,l.country||COUNTRY)+" - Seller: "+l.seller+" ("+(l.country||"")+")<br><button onclick=\"approveListing('"+l.id+"')\" style='background:#065F46;color:#fff;padding:10px 16px;border:0;border-radius:99px'>Approve Listing</button> <button onclick=\"rejectListing('"+l.id+"')\" style='background:#991B1B;color:#fff;padding:10px 16px;border:0;border-radius:99px'>Reject</button></div>"}).join("");if($("adminAll"))$("adminAll").innerHTML=members.map(function(m){var w=memberWallet(m);return "<div style='border-bottom:1px solid #eee;padding:6px 0'>"+m.code+" - "+m.name+" ("+(m.country||"")+") - Plan "+fmt(m.amount,m.country||COUNTRY)+" - Wallet "+fmt(w.available,m.country||COUNTRY)+" - "+(m.status==="approved"?"✅":"⏳")+"</div>"}).join("")}
-function publishAnn(){localStorage.setItem("ob_announcement",$("adminAnnInput").value);alert("Announcement published")}
-function saveBankDetails(){var m=window.current;if(!m)return;var bank=$("editBank").value;var acct=$("editAcct").value.trim();var acctName=$("editAcctName").value.trim();var wMethod=$("editWithdrawMethod")?$("editWithdrawMethod").value:"";if(!bank||!acct||!acctName){alert("Fill all bank fields");return}var list=getMembers().map(function(x){if(x.phone===m.phone)return Object.assign({},x,{bank:bank,acct:acct,acctName:acctName,withdrawMethod:wMethod});return x});saveMembers(list);alert("Bank + Withdrawal method updated: "+wMethod)}
-function requestWithdrawal(){var amt=Number($("wAmount").value);var m=window.current;if(!m)return;var min=minWithdraw(m.country||COUNTRY);if(!amt||amt<min){alert("Minimum withdrawal is "+fmt(min,m.country||COUNTRY)+" = $2. You entered "+fmt(amt||0,m.country||COUNTRY));return}var w=memberWallet(m);if(amt>w.available){alert("You only have "+fmt(w.available,m.country||COUNTRY)+" available. Earnings + Savings - Paid - Pending.");return}var payM=$("wPayMethod")?$("wPayMethod").value:"";var wMethod=$("wWithdrawMethod")?$("wWithdrawMethod").value:"";var list=getWithdrawals();list.unshift({id:Date.now().toString(),name:m.name,phone:m.phone,amount:round10(amt),country:m.country||COUNTRY,bank:m.bank,acct:m.acct,acctName:m.acctName,payMethod:payM,withdrawMethod:wMethod,status:"pending"});saveWithdrawals(list);renderMember();alert("Withdrawal "+fmt(round10(amt),m.country||COUNTRY)+" requested via "+wMethod+" • Minimum was "+fmt(min,m.country||COUNTRY)+" ($2)")}
-function copyLink(){var t=$("memLink").innerText.replace("Your Link: ","");if(navigator.clipboard)navigator.clipboard.writeText(t);alert("Link copied")}
-setInterval(function(){renderMemberWallet();renderAdminWallets();updateMinLabels();if($("walletLiveNote"))$("walletLiveNote").innerText="Live • Updated "+new Date().toLocaleTimeString()+" • 1 USD = ₦1,353 • GH₵11.79 • R17.59"},30000);
-var savedCountry=localStorage.getItem("ob_country")||"Nigeria";COUNTRY=savedCountry;setCountry(COUNTRY);fillBanks();fillPlans();fillPayMethods();renderTiers();calcSavings();renderHome();renderShop();renderAdminWallets();updateMinLabels();
+// ONE BANK COOPERATIVE - OBC - STEP 1 + 2 ONLY - MANUAL LAUNCH
+// STEP 1: Pan-African + Country Switch + Hidden Referral
+// STEP 2: Banks + Plans + Prices auto-switch by country
+// STEP 3+4 (Next): Supabase DB + 3 Admins isolation
+
+let COUNTRY = localStorage.getItem("ob_country") || "Nigeria";
+const RATES = { "Nigeria": 1353, "Ghana": 11.79, "South Africa": 17.59 };
+const SYM = { "Nigeria": "₦", "Ghana": "GH₵", "South Africa": "R" };
+const MIN_LOCAL = { "Nigeria": 2710, "Ghana": 30, "South Africa": 40 };
+
+const BANKS = {
+  "Nigeria": ["Access Bank","GTBank","First Bank","UBA","Zenith Bank","OPay","Moniepoint MFB","PalmPay","Kuda MFB","Fidelity Bank","Union Bank","Stanbic IBTC","Wema Bank"],
+  "Ghana": ["MTN MoMo","Telecel Cash","AirtelTigo Money","GCB Bank","Ecobank Ghana","Absa Ghana","Stanbic Ghana","Fidelity Ghana","CalBank","Zenith Ghana"],
+  "South Africa": ["Capitec","FNB","Standard Bank","ABSA","Nedbank","TymeBank","Discovery Bank","African Bank"]
+};
+const PHONE_HINT = {
+  "Nigeria": ["080... (e.g 08031234567)","10-digit NUBAN Account Number","Select Your Bank / Wallet (Nigeria)"],
+  "Ghana": ["024... / 055... (e.g 0241234567)","10-digit MoMo / Account Number","Select Your Bank / MoMo (Ghana)"],
+  "South Africa": ["082... (e.g 0821234567)","10-digit Account Number","Select Your Bank (South Africa)"]
+};
+const PLANS_NGN = [
+  {amt:10000,tier:1,d:25,i:10},{amt:15000,tier:1,d:25,i:10},{amt:20000,tier:1,d:25,i:10},
+  {amt:25000,tier:1,d:25,i:10},{amt:30000,tier:1,d:25,i:10},{amt:35000,tier:1,d:25,i:10},
+  {amt:40000,tier:2,d:30,i:10},{amt:50000,tier:2,d:30,i:10},{amt:60000,tier:2,d:30,i:10},{amt:70000,tier:2,d:30,i:10},
+  {amt:80000,tier:3,d:35,i:15},{amt:90000,tier:3,d:35,i:15},{amt:100000,tier:3,d:35,i:15},{amt:120000,tier:3,d:35,i:15}
+];
+function round10(n){ return Math.round(n/10)*10; }
+function convertNGN(ngn,c){ if(c==="Nigeria") return ngn; return round10(ngn / RATES["Nigeria"] * RATES[c]); }
+function fmt(n,c){ c=c||COUNTRY; return SYM[c] + Number(n).toLocaleString(); }
+function fmtUSD(ngn){ return "$" + (ngn / RATES["Nigeria"]).toFixed(2); }
+function getMembers(){ try{return JSON.parse(localStorage.getItem("ob_members")||"[]")}catch(e){return[]} }
+function setMembers(m){ localStorage.setItem("ob_members",JSON.stringify(m)); }
+function getWds(){ try{return JSON.parse(localStorage.getItem("ob_withdrawals")||"[]")}catch(e){return[]} }
+function setWds(w){ localStorage.setItem("ob_withdrawals",JSON.stringify(w)); }
+function getOrders(){ try{return JSON.parse(localStorage.getItem("ob_orders")||"[]")}catch(e){return[]} }
+function setOrders(o){ localStorage.setItem("ob_orders",JSON.stringify(o)); }
+
+// NAV
+function toggleDrawer(){ document.getElementById('drawer').classList.toggle('open'); }
+function showPage(p){ ['home','shop','join','login','savings','profile','admin'].forEach(x=>{ const el=document.getElementById('page-'+x); if(el) el.classList.toggle('hidden',x!==p); }); document.getElementById('drawer').classList.remove('open'); window.scrollTo(0,0); if(p==='shop') renderShop(); if(p==='profile') renderMemberWallet(); if(p==='admin') renderAdmin(); }
+
+// STEP 1+2 - COUNTRY SWITCH - updates EVERYTHING
+function setCountry(c){
+  COUNTRY=c; localStorage.setItem("ob_country",c);
+  ['Nigeria','Ghana','South Africa'].forEach(cc=>{
+    const b=document.getElementById(cc==='Nigeria'?'cNG':cc==='Ghana'?'cGH':'cZA');
+    if(b) b.classList.toggle('active',cc===c);
+  });
+  const rs=document.getElementById('rateStrip');
+  if(rs) rs.innerText=`You are in ${c} • 1 USD = ${SYM[c]}${RATES[c]} • Min Withdrawal ${SYM[c]}${MIN_LOCAL[c]} ($2)`;
+  const t=document.getElementById('countryFormTitle'); if(t) t.innerText=`You are joining in ${c}`;
+  const h=document.getElementById('countryFormHint'); if(h) h.innerText=`Your payment will go to ${c} Admin. Your wallet will be in ${SYM[c]}.`;
+  const bl=document.getElementById('jBankLabel'); if(bl) bl.innerText=PHONE_HINT[c][2];
+  const jp=document.getElementById('jPhone'); if(jp) jp.placeholder=PHONE_HINT[c][0];
+  const ja=document.getElementById('jAcct'); if(ja) ja.placeholder=PHONE_HINT[c][1];
+  const cs=document.getElementById('calcSym'); if(cs) cs.innerText=SYM[c];
+  const m1=document.getElementById('minLabel1'); if(m1) m1.innerText=`${SYM[c]}${MIN_LOCAL[c].toLocaleString()}`;
+  const sc=document.getElementById('shopCountryNote'); if(sc) sc.innerText=`Prices in ${c} • Min Withdrawal ${SYM[c]}${MIN_LOCAL[c]} ($2)`;
+  fillBanks(); fillPlans(); renderShop(); calcSavings(); loadPaySettingsForCountry();
+}
+function fillBanks(){ const s=document.getElementById('jBank'); if(!s) return; s.innerHTML=`<option value="">-- ${PHONE_HINT[COUNTRY][2]} --</option>`+BANKS[COUNTRY].map(b=>`<option>${b}</option>`).join(''); }
+function fillPlans(){ const s=document.getElementById('jPlan'); if(!s) return; s.innerHTML=PLANS_NGN.map(p=>{ const local=convertNGN(p.amt,COUNTRY); return `<option value="${p.amt}|${p.tier}|${p.d}|${p.i}">${fmt(local,COUNTRY)} • Tier ${p.tier} • Direct ${p.d}% / Indirect ${p.i}% • ≈ ${fmtUSD(p.amt)}</option>`; }).join(''); }
+
+// SHOP
+const PRODUCTS=[
+ {id:'gen1',name:'5.5KVA Generator',price:450000,old:520000,cat:'gen',img:'https://images.unsplash.com/photo-1581093458791-9d42e3c7e117?w=600'},
+ {id:'gen2',name:'7KVA Generator',price:680000,old:750000,cat:'gen',img:'https://images.unsplash.com/photo-1581093458791-9d42e3c7e117?w=600'},
+ {id:'fr1',name:'Double Door Fridge',price:380000,old:420000,cat:'fridge',img:'https://images.unsplash.com/photo-1571175443880-49e1d25b2bc5?w=600'},
+ {id:'fr2',name:'Single Door Fridge',price:220000,old:260000,cat:'fridge',img:'https://images.unsplash.com/photo-1571175443880-49e1d25b2bc5?w=600'},
+ {id:'fz1',name:'Chest Freezer 200L',price:310000,old:350000,cat:'freezer',img:'https://images.unsplash.com/photo-1571175443880-49e1d25b2bc5?w=600'},
+ {id:'fz2',name:'Chest Freezer 300L',price:420000,old:480000,cat:'freezer',img:'https://images.unsplash.com/photo-1571175443880-49e1d25b2bc5?w=600'},
+ {id:'tv1',name:'43" Smart TV',price:280000,old:320000,cat:'tv',img:'https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=600'},
+ {id:'tv2',name:'55" Smart TV',price:450000,old:520000,cat:'tv',img:'https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=600'},
+ {id:'h1',name:'Standing Fan',price:65000,old:80000,cat:'home',img:'https://images.unsplash.com/photo-1565151443833-29bfb2d5a3c6?w=600'},
+ {id:'h2',name:'Rice Cooker',price:45000,old:55000,cat:'home',img:'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=600'},
+ {id:'h3',name:'Electric Kettle',price:35000,old:45000,cat:'home',img:'https://images.unsplash.com/photo-1594213114663-d94db9b17125?w=600'},
+ {id:'h4',name:'Blender Set',price:55000,old:65000,cat:'home',img:'https://images.unsplash.com/photo-1570222094114-d054a817e56b?w=600'}
+];
+let CUR_CAT='All';
+function setCat(c){ CUR_CAT=c; renderShop(); }
+function renderShop(){
+  const box=document.getElementById('shopProducts'); if(!box) return;
+  const q=(document.getElementById('searchInput')?.value||'').toLowerCase();
+  const list=PRODUCTS.filter(p=>(CUR_CAT==='All'||p.cat===CUR_CAT)&&p.name.toLowerCase().includes(q));
+  box.innerHTML=list.map(p=>{ const local=convertNGN(p.price,COUNTRY); const inst=round10(local/4);
+    return `<div class="prod"><img src="${p.img}"><div style="padding:10px"><span style="background:#FFF3CD;font-size:10px;padding:3px 8px;border-radius:99px">IN STOCK - PAY SMALL SMALL • ${COUNTRY}</span><br><b>${p.name}</b><p>⭐⭐⭐⭐⭐ (128)</p><b>${fmt(local,COUNTRY)}</b> <s style="font-size:11px;color:#999">${fmt(convertNGN(p.old,COUNTRY),COUNTRY)}</s><p>or 4 x ${fmt(inst,COUNTRY)} - Pay via ${BANKS[COUNTRY][0]}</p><button class="btnNavy" onclick="startOrder('${p.id}')">Pay Small Small →</button></div></div>`; }).join('');
+}
+function startOrder(id){
+  const cur=JSON.parse(localStorage.getItem("ob_current")||"null");
+  if(!cur) return alert("Please Login first with your Phone + Password"), showPage('login');
+  const p=PRODUCTS.find(x=>x.id===id); const total=convertNGN(p.price,COUNTRY);
+  const orders=getOrders(); orders.push({id:Date.now(),user:cur.phone,product:p.name,total,paid:0,status:'installment',country:COUNTRY}); setOrders(orders);
+  alert("✅ Order started: "+p.name+" — Pay in 4 x "+fmt(round10(total/4),COUNTRY)); renderMemberWallet();
+}
+
+// JOIN - Hidden Referral
+function joinMember(){
+  const name=jName.value.trim(), phone=jPhone.value.trim(), pass=jPass.value, bank=jBank.value, acct=jAcct.value.trim(), acctName=jAcctName.value.trim(), plan=jPlan.value;
+  if(!name||!phone||!pass||!bank||!acct||!acctName||!plan){ joinErr.innerText="Please fill ALL fields."; return; }
+  if(acct.length!==10){ joinErr.innerText="Account / MoMo must be 10 digits."; return; }
+  const members=getMembers(); if(members.find(m=>m.phone===phone)){ joinErr.innerText="Phone already registered. Please login."; return; }
+  const [amt,tier,d,i]=plan.split('|').map(Number);
+  const ref=(document.getElementById('jRef').value||'ONEBANK').toUpperCase();
+  const code='OB-'+(1001+members.length);
+  const m={code,name,phone,pass,country:COUNTRY,bank,acct,acctName,plan:amt,planLocal:convertNGN(amt,COUNTRY),tier,directPct:d,indirectPct:i,referral:ref,status:'pending_payment',paymentStatus:'none',directEarn:0,indirectEarn:0,saved:0,goal:200000};
+  members.push(m); setMembers(members);
+  localStorage.setItem("ob_current",JSON.stringify({phone,code}));
+  // Show Pay Card
+  document.getElementById('payCard').style.display='block';
+  payCountryLabel.innerText=COUNTRY; payAmount.innerText=fmt(convertNGN(amt,COUNTRY),COUNTRY)+" (≈ "+fmtUSD(amt)+")";
+  loadPaySettingsForCountry();
+  alert("✅ Welcome "+name+"! Your code is "+code+". Now pay "+fmt(convertNGN(amt,COUNTRY),COUNTRY)+" to "+COUNTRY+" Admin, then enter Sender + Ref.");
+  window.scrollTo(0,document.getElementById('payCard').offsetTop);
+}
+function loadPaySettingsForCountry(){
+  const s=JSON.parse(localStorage.getItem("ob_pay_"+COUNTRY)||"null");
+  if(s){ payToBank.innerText=s.bank; payToName.innerText=s.name; payToNumber.innerText=s.number; payToInstr.innerText=s.instr||""; }
+  else { payToBank.innerText=COUNTRY+" Admin Account"; payToName.innerText="ONE BANK COOPERATIVE"; payToNumber.innerText="To be set by "+COUNTRY+" Admin"; }
+}
+function submitPayment(){
+  const sender=paySender.value.trim(), ref=payRef.value.trim();
+  if(!sender||!ref) return alert("Enter Sender Name + Payment Reference");
+  const cur=JSON.parse(localStorage.getItem("ob_current")||"null"); if(!cur) return alert("Please join first");
+  const members=getMembers(); const m=members.find(x=>x.phone===cur.phone); if(!m) return;
+  m.paymentSender=sender; m.paymentRef=ref; m.paymentStatus='submitted'; m.status='pending_payment'; setMembers(members);
+  alert("✅ Payment submitted — "+m.country+" Admin will confirm. Your wallet activates after approval."); showPage('profile');
+}
+
+// MEMBER LOGIN / WALLET
+function memberLogin(){
+  const members=getMembers(); const m=members.find(x=>x.phone===mPhone.value.trim()&&x.pass===mPass.value);
+  if(!m){ loginErr.innerText="Wrong phone or password"; return; }
+  localStorage.setItem("ob_current",JSON.stringify({phone:m.phone,code:m.code})); showPage('profile'); renderMemberWallet();
+}
+function memberLogout(){ localStorage.removeItem("ob_current"); showPage('login'); }
+function copyLink(){ const cur=JSON.parse(localStorage.getItem("ob_current")||"null"); if(!cur) return; const link=location.origin+location.pathname+"?ref="+cur.code; navigator.clipboard?.writeText(link); alert("Copied: "+link); }
+function renderMemberWallet(){
+  const cur=JSON.parse(localStorage.getItem("ob_current")||"null"); if(!cur) return;
+  const members=getMembers(); const m=members.find(x=>x.phone===cur.phone); if(!m) return;
+  const earn=m.directEarn+m.indirectEarn; const avail=earn+m.saved - getWds().filter(w=>w.phone===m.phone&&w.status==='pending').reduce((a,w)=>a+w.amount,0) - getWds().filter(w=>w.phone===m.phone&&w.status==='paid').reduce((a,w)=>a+w.amount,0);
+  // Note: avail calc uses stored earn; pending/paid from withdrawals
+  const pending=getWds().filter(w=>w.phone===m.phone&&w.status==='pending').reduce((a,w)=>a+w.amount,0);
+  const paid=getWds().filter(w=>w.phone===m.phone&&w.status==='paid').reduce((a,w)=>a+w.amount,0);
+  const realAvail = earn + m.saved - pending - paid;
+  memName.innerText=m.name; memCode.innerText=m.code; memPlan.innerText=fmt(m.planLocal,m.country)+" • Tier "+m.tier+" • "+m.status;
+  walletMain.innerText=fmt(realAvail,m.country); walletOther.innerText=`Earnings ${fmt(earn,m.country)} • Savings ${fmt(m.saved,m.country)} • Pending ${fmt(pending,m.country)} • Paid ${fmt(paid,m.country)}`;
+  walletMin.innerText=`Min Withdrawal ${SYM[m.country]}${MIN_LOCAL[m.country].toLocaleString()} ($2) • Available ${fmt(realAvail,m.country)}`;
+  walletLiveNote.innerText=`Country: ${m.country} • Live: 1 USD = ${SYM[m.country]}${RATES[m.country]} • Status: ${m.paymentStatus==='submitted'?'Payment Submitted - Awaiting '+m.country+' Admin':m.status}`;
+  memLink.innerText=location.origin+location.pathname+"?ref="+m.code;
+  memWithdrawals.innerHTML=getWds().filter(w=>w.phone===m.phone).map(w=>`<p>${fmt(w.amount,m.country)} — ${w.status} • ${w.bank}</p>`).join('')||'<p>No withdrawals yet</p>';
+  memOrdersList.innerHTML=getOrders().filter(o=>o.user===m.phone).map(o=>`<p>${o.product} — Paid ${fmt(o.paid,m.country)} / ${fmt(o.total,m.country)} — ${o.status}</p>`).join('')||'<p>No orders yet</p>';
+}
+function requestWithdrawal(){
+  const cur=JSON.parse(localStorage.getItem("ob_current")||"null"); if(!cur) return alert("Please Login first"), showPage('login');
+  const members=getMembers(); const m=members.find(x=>x.phone===cur.phone);
+  const amt=round10(Number(wAmount.value||0));
+  const earn=m.directEarn+m.indirectEarn;
+  const pending=getWds().filter(w=>w.phone===m.phone&&w.status==='pending').reduce((a,w)=>a+w.amount,0);
+  const paid=getWds().filter(w=>w.phone===m.phone&&w.status==='paid').reduce((a,w)=>a+w.amount,0);
+  const avail=earn+m.saved-pending-paid;
+  if(amt < MIN_LOCAL[m.country]) return alert(`⛔ Min withdrawal is ${SYM[m.country]}${MIN_LOCAL[m.country]} ($2)`);
+  if(amt > avail) return alert(`⛔ You only have ${fmt(avail,m.country)} available`);
+  const wds=getWds(); wds.push({id:Date.now(),phone:m.phone,name:m.name,country:m.country,amount:amt,bank:m.bank,acct:m.acct,status:'pending'}); setWds(wds);
+  alert("✅ Withdrawal requested — "+m.country+" Admin will pay you."); renderMemberWallet();
+}
+
+// ADMIN - STEP 3+4 will replace with Supabase. For now: country filter via email.
+let ADMIN_COUNTRY=null;
+function adminLogin(){
+  const email=aEmail.value.trim().toLowerCase(), pass=aPass.value;
+  // Temp mapping - Supabase will replace in Step 3+4
+  const map={'eagleeyesight4@gmail.com':'Nigeria','about2blowent@gmail.com':'Ghana','wonderfreeman9@gmail.com':'South Africa'};
+  if(!map[email]){ adminLoginErr.innerText="⛔ Not a country admin email"; return; }
+  // Passwords are checked in Supabase in Step 3+4. For Step 1+2, store admin country in session.
+  ADMIN_COUNTRY=map[email]; localStorage.setItem("ob_admin_country",ADMIN_COUNTRY);
+  adminLoginBox.style.display='none'; adminDash.style.display='block';
+  adminTitle.innerText=(ADMIN_COUNTRY==='Nigeria'?'🇳🇬':ADMIN_COUNTRY==='Ghana'?'🇬🇭':'🇿🇦')+' '+ADMIN_COUNTRY+' Admin Dashboard';
+  adminSub.innerText='You see ONLY '+ADMIN_COUNTRY+' • No other country';
+  renderAdmin();
+}
+function adminLogout(){ localStorage.removeItem("ob_admin_country"); location.reload(); }
+function savePaySettings(){
+  if(!ADMIN_COUNTRY) return alert("Login as admin first");
+  localStorage.setItem("ob_pay_"+ADMIN_COUNTRY,JSON.stringify({bank:psBank.value,name:psName.value,number:psNumber.value,instr:psInstr.value}));
+  alert("✅ Saved — "+ADMIN_COUNTRY+" members will now see this account at checkout"); loadPaySettingsForCountry();
+}
+function publishAnnouncement(){
+  localStorage.setItem("ob_ann_"+ADMIN_COUNTRY,adminAnnInput.value); homeAnnouncement.innerText=adminAnnInput.value; alert("✅ Published for "+ADMIN_COUNTRY);
+}
+function renderAdmin(){
+  ADMIN_COUNTRY=ADMIN_COUNTRY||localStorage.getItem("ob_admin_country"); if(!ADMIN_COUNTRY) return;
+  const members=getMembers().filter(m=>m.country===ADMIN_COUNTRY);
+  adminStats.innerText=`${ADMIN_COUNTRY}: Members ${members.length} • Pending Payment ${members.filter(m=>m.paymentStatus==='submitted').length}`;
+  adminLiveNote.innerText=`Live: You see ONLY ${ADMIN_COUNTRY}`;
+  adminPending.innerHTML=members.filter(m=>m.paymentStatus==='submitted').map(m=>`<div style="border:1px solid #eee;padding:10px;border-radius:10px;margin:6px 0"><b>${m.name}</b> • ${m.code} • ${fmt(m.planLocal,m.country)} • Sender: ${m.paymentSender} • Ref: ${m.paymentRef}<br><button class="btnGold" onclick="approveMember('${m.phone}')">Confirm Payment + Approve + Pay Split</button></div>`).join('')||'<p>No pending payments</p>';
+  adminWithdrawals.innerHTML=getWds().filter(w=>w.country===ADMIN_COUNTRY&&w.status==='pending').map(w=>`<p>${w.name} — ${fmt(w.amount,ADMIN_COUNTRY)} — ${w.bank} ${w.acct} <button onclick="payWithdrawal(${w.id})">Mark as Paid</button></p>`).join('')||'<p>No pending withdrawals</p>';
+  adminAll.innerHTML=members.map(m=>`<p>${m.code} • ${m.name} • ${fmt(m.planLocal,m.country)} • Earnings ${fmt(m.directEarn+m.indirectEarn,m.country)} • ${m.status}</p>`).join('')||'<p>No members yet in '+ADMIN_COUNTRY+'</p>';
+}
+function approveMember(phone){
+  const members=getMembers(); const m=members.find(x=>x.phone===phone); if(!m) return;
+  if(m.paymentStatus!=='submitted') return alert("⛔ CANNOT APPROVE - No payment submitted yet. Ask member to submit Sender + Ref.");
+  if(!confirm(`Confirm payment from ${m.name}? Amount ${fmt(m.planLocal,m.country)} • Sender ${m.paymentSender} • Ref ${m.paymentRef}`)) return;
+  m.paymentStatus='confirmed'; m.status='approved';
+  // SPLIT - Direct + Indirect
+  const direct=members.find(x=>x.code===m.referral);
+  if(direct){ const bonus=round10(m.plan * m.directPct/100); const bonusLocal = direct.country===m.country ? bonus : convertNGN(bonus, direct.country); direct.directEarn+=bonusLocal; }
+  if(direct){ const ind=members.find(x=>x.code===direct.referral); if(ind && ind.code!=='ONEBANK'){ const bonus2=round10(m.plan * m.indirectPct/100); const b2 = ind.country===m.country ? bonus2 : convertNGN(bonus2, ind.country); ind.indirectEarn+=b2; } }
+  setMembers(members); alert("✅ Approved + Split Paid — Referrer wallet updated"); renderAdmin();
+}
+function payWithdrawal(id){ const wds=getWds(); const w=wds.find(x=>x.id===id); if(!w) return; w.status='paid'; setWds(wds); alert("✅ Marked as Paid — Member wallet updated"); renderAdmin(); renderMemberWallet(); }
+
+// CALC + INIT
+function calcSavings(){ const w=Number(calcWeekly.value||0); const yearly=round10(w*52); const local = COUNTRY==="Nigeria" ? yearly : convertNGN(yearly,COUNTRY); calcResult.innerText=`Save ${fmt(w,COUNTRY)} weekly = ${fmt(local,COUNTRY)} in 1 year (≈ $${(yearly/RATES["Nigeria"]).toFixed(2)})`; }
+(function init(){
+  const ref=new URLSearchParams(location.search).get('ref');
+  if(ref){ const el=document.getElementById('jRef'); if(el) el.value=ref.toUpperCase(); const d=document.getElementById('refDisplay'); if(d) d.innerText=ref.toUpperCase()+' (Member)'; }
+  setCountry(COUNTRY);
+  const ann=localStorage.getItem("ob_ann_"+COUNTRY); if(ann) homeAnnouncement.innerText=ann;
+})();
